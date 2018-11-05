@@ -12,7 +12,7 @@ Part One Instructions.
 
 Part Two Instructions.
 Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://github.com/duftler/scratch/raw/master/stackdriver_grab.png "Test Large Image")
 
 ## Second step
 
