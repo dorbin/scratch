@@ -7,11 +7,11 @@ gcloud services --project $PROJECT_ID enable container.googleapis.com monitoring
 
 
 SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
-gcloud iam service-accounts create \
+gcloud iam service-accounts --project $PROJECT_ID create \
   $SERVICE_ACCOUNT_NAME \
   --display-name $SERVICE_ACCOUNT_NAME
 
-SA_EMAIL=$(gcloud iam service-accounts list \
+SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
   --filter="displayName:$SERVICE_ACCOUNT_NAME" \
   --format='value(email)')
 
