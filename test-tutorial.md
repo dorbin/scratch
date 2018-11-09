@@ -2,17 +2,17 @@
 
 ## First step
 
-Hello World
+<walkthrough-project-billing-setup></walkthrough-project-billing-setup>
 
 ### Part 1
 
 Part One Instructions.
 
+```setup.sh```
+
 ### Part 2
 
 Part Two Instructions.
-Inline-style: 
-![alt text](https://github.com/duftler/scratch/raw/master/stackdriver_grab.png "Test Large Image")
 
 ## Second step
 
