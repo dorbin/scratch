@@ -8,7 +8,9 @@
 
 Part One Instructions.
 
-```setup.sh```
+```bash
+setup.sh
+```
 
 ### Part 2
 
