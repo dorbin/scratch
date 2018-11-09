@@ -1,32 +1,22 @@
 # First Tutorial
 
-## First step
+## Project Selection
 
 <walkthrough-project-billing-setup></walkthrough-project-billing-setup>
 
-### Part 1
-
-Part One Instructions.
+## Spinnaker Installation
 
 ```bash
 setup.sh
 ```
 
-### Part 2
-
-Part Two Instructions.
-
-## Second step
-
-Hello More World
-
 ### Part 3
 
-Part One Instructions.
+Part Three Instructions.
 
 ### Part 4
 
-Part Two Instructions.
+Part Four Instructions.
 
 ## Conclusion
 
