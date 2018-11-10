@@ -26,56 +26,13 @@ Verify (or modify) the environment variables that will be used for your Spinnake
     text="Open properties file">
 </walkthrough-editor-open-file>
 
-### Begin the installation (this will take a while).
+### Begin the installation (this will take some time).
 
 ```bash
 ./setup.sh
 ```
 
 Once the setup script completes, continue to the next step.
-
-## Modify Spinnaker Deployment
-
-Wait until all Spinnaker pods are up and running.
-
-```bash
-watch kubectl get po -n spinnaker
-```
-
-### Locate Halyard Pod
-
-```bash
-HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
-    -o jsonpath="{.items[0].metadata.name}")
-```
-
-### Configure Persistent Storage
-
-```bash
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
-    cat enable_persistent_storage.sh | envsubst)"
-```
-
-### Configure Kayenta
-
-```bash
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
-    cat enable_kayenta.sh | envsubst)"
-```
-
-## Apply Changes
-
-Have Halyard apply the changes to the running deployment.
-
-```bash
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c "hal deploy apply"
-```
-
-Again wait until all Spinnaker pods are up and running (several will be recreated).
-
-```bash
-watch kubectl get po -n spinnaker
-```
 
 ## Connect to Spinnaker
 
