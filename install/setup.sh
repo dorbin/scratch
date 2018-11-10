@@ -17,9 +17,9 @@ NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
 
 if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   bold "Enabling required APIs ($REQUIRED_APIS)..."
-fi
 
-gcloud services --project $PROJECT_ID enable container.googleapis.com monitoring.googleapis.com
+  gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
+fi
 
 SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
   --filter="displayName:$SERVICE_ACCOUNT_NAME" \
