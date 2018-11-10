@@ -78,4 +78,6 @@ bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
 
 gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
+bold "Provisioning Spinnaker resources..."
+
 kubectl apply -f quick-install.yml

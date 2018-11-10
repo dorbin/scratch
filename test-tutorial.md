@@ -30,9 +30,15 @@ Verify (or modify) the environment variables that will be used for your Spinnake
 ./setup.sh
 ```
 
-Once the setup process completes, continue to the next step.
+Once the setup script completes, continue to the next step.
 
 ## Modify Spinnaker Deployment
+
+Wait until all Spinnaker pods are up and running.
+
+```bash
+watch kubectl get po -n spinnaker
+```
 
 ### Locate Halyard Pod
 
