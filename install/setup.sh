@@ -58,6 +58,11 @@ if [ -z "$REDIS_INSTANCE_HOST" ]; then
 
   gcloud redis instances create $REDIS_INSTANCE --project $PROJECT_ID \
     --region=$REGION --zone=$ZONE
+
+  export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
+    --project $PROJECT_ID --region $REGION \
+    --filter="name=projects/$PROJECT_ID/locations/$REGION/instances/$REDIS_INSTANCE" \
+    --format="value(host)")
 else
   bold "Using existing redis instance $REDIS_INSTANCE ($REDIS_INSTANCE_HOST)..."
 fi
