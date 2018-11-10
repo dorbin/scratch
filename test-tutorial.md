@@ -6,7 +6,7 @@
 
 ## Spinnaker Installation
 
-Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon below to copy the command to your shell, and then run it from the shell by pressing Enter/Return. The Spinnaker provisioning logic will pick up the project name from the environment variable.
+Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon below to copy the command to your shell, and then run it from the shell by pressing Enter/Return. The Spinnaker provisioning logic will pick up the project id from the environment variable.
 
 ```bash
 export GOOGLE_CLOUD_PROJECT={{project-id}}
