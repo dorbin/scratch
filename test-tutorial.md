@@ -49,18 +49,32 @@ HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
     -o jsonpath="{.items[0].metadata.name}")
 ```
 
-### Enable Persistent Storage
+### Configure Persistent Storage
 
 ```bash
 kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
     cat enable_persistent_storage.sh | envsubst)"
 ```
 
-### Enable Kayenta
+### Configure Kayenta
 
 ```bash
 kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
     cat enable_kayenta.sh | envsubst)"
+```
+
+### Apply Changes
+
+Have Halyard apply the changes to the running deployment.
+
+```bash
+kubectl exec $HALYARD_POD -n spinnaker -- bash -c "hal deploy apply"
+```
+
+Again wait until all Spinnaker pods are up and running (several will be recreated).
+
+```bash
+watch kubectl get po -n spinnaker
 ```
 
 ## Connect to Spinnaker
