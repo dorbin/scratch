@@ -45,12 +45,12 @@ HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
 
 ```bash
 kubectl exec $HALYARD_POD -n spinnaker \
-  -- bash -c "$(cat enable_persistent_storage.sh | envsubst)"
+  -- bash -c "$(source ./properties && cat enable_persistent_storage.sh | envsubst)"
 ```
 
 ### Enable Kayenta
 
 ```bash
 kubectl exec $HALYARD_POD -n spinnaker \
-  -- bash -c "$(cat enable_kayenta.sh | envsubst)"
+  -- bash -c "$(source ./properties && cat enable_kayenta.sh | envsubst)"
 ```
