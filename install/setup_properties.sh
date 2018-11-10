@@ -11,11 +11,14 @@ else
 #!/usr/bin/env bash
 
 export PROJECT_ID=$PROJECT_ID
+# If cluster does not exist, it will be created.
 export GKE_CLUSTER=spin-deployment
 export ZONE=us-west1-b
 
+# If service account does not exist, it will be created.
 export SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
 
+# If bucket does not exist, it will be created.
 export BUCKET_NAME="spin-gcs-bucket-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 EOL
 fi

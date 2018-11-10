@@ -5,21 +5,20 @@ source ./properties
 gcloud services --project $PROJECT_ID enable container.googleapis.com monitoring.googleapis.com
 
 
-#SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
-#gcloud iam service-accounts --project $PROJECT_ID create \
-#  $SERVICE_ACCOUNT_NAME \
-#  --display-name $SERVICE_ACCOUNT_NAME
+gcloud iam service-accounts --project $PROJECT_ID create \
+  $SERVICE_ACCOUNT_NAME \
+  --display-name $SERVICE_ACCOUNT_NAME
 
-#SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
-#  --filter="displayName:$SERVICE_ACCOUNT_NAME" \
-#  --format='value(email)')
+SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
+  --filter="displayName:$SERVICE_ACCOUNT_NAME" \
+  --format='value(email)')
 
 # TODO: What exact roles are required?
-#gcloud projects add-iam-policy-binding $PROJECT_ID \
-#  --member serviceAccount:$SA_EMAIL \
-#  --role roles/owner
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member serviceAccount:$SA_EMAIL \
+  --role roles/owner
 
-#gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME
+gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME
 
 
 
