@@ -40,7 +40,7 @@ else
 fi
 
 # TODO: What exact roles are required?
-bold "Adding required roles to $SERVICE_ACCOUNT_NAME..."
+bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SA_EMAIL \
   --role roles/owner
@@ -56,9 +56,28 @@ else
   bold "Using existing bucket $BUCKET_URI..."
 fi
 
+CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
+  --format="value(name)" --filter="name=$GKE_CLUSTER")
+
+if [ -z "$CLUSTER_EXISTS" ]; then
+  bold "Creating GKE cluster $GKE_CLUSTER..."
+
+  # TODO: Move some of these config settings to properties file.
+  gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
+    --zone $ZONE --username "admin" --cluster-version "1.11.2" \
+    --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
+    --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" \
+    --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
+    --addons HorizontalPodAutoscaling,HttpLoadBalancing
+else
+  bold "Using existing GKE cluster $GKE_CLUSTER..."
+fi
+
 #gcloud beta container --project $PROJECT_ID clusters create $CLUSTER_NAME --zone $ZONE --username "admin" --cluster-version "1.11.2" --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" --enable-stackdriver-kubernetes --addons HorizontalPodAutoscaling,HttpLoadBalancing --enable-autoupgrade --enable-autorepair
 
 
-#gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID
+bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
+
+gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
 #kubectl apply -f quick-install.yml
