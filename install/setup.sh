@@ -13,7 +13,8 @@ source ./properties
 REQUIRED_APIS="container.googleapis.com monitoring.googleapis.com redis.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
-  --format="value(config.name)" --filter="config.name:($REQUIRED_APIS)" | wc -l)
+  --filter="config.name:($REQUIRED_APIS)" \
+  --format="value(config.name)" | wc -l)
 
 if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   bold "Enabling required APIs ($REQUIRED_APIS)..."
@@ -41,10 +42,25 @@ fi
 
 # TODO: What exact roles are required?
 bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
+
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SA_EMAIL \
   --role roles/owner \
   --format=none
+
+export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
+  --project $PROJECT_ID --region $REGION \
+  --filter="name=projects/$PROJECT_ID/locations/$REGION/instances/$REDIS_INSTANCE" \
+  --format="value(host)")
+
+if [ -z "$REDIS_INSTANCE_HOST" ]; then
+  bold "Creating redis instance $REDIS_INSTANCE..."
+
+  gcloud redis instances create $REDIS_INSTANCE --project $PROJECT_ID \
+    --region=$REGION --zone=$ZONE
+else
+  bold "Using existing redis instance $REDIS_INSTANCE ($REDIS_INSTANCE_HOST)..."
+fi
 
 # TODO: Could verify ACLs here. In the meantime, error messages should suffice.
 gsutil ls $BUCKET_URI
@@ -58,7 +74,8 @@ else
 fi
 
 CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
-  --format="value(name)" --filter="name=$GKE_CLUSTER")
+  --filter="name=$GKE_CLUSTER" \
+  --format="value(name)")
 
 if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Creating GKE cluster $GKE_CLUSTER..."
@@ -97,22 +114,22 @@ job_ready hal-deploy-apply deployment
 bold "Modifying base Spinnaker deployment..."
 
 HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
-    -o jsonpath="{.items[0].metadata.name}")
+  -o jsonpath="{.items[0].metadata.name}")
 
 bold "Configuring persistent storage..."
 
 kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-    "$(source ./properties && cat configure_persistent_storage.sh | envsubst)"
+  "$(source ./properties && cat configure_persistent_storage.sh | envsubst)"
 
 bold "Configuring canary analysis..."
 
 kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-    "$(source ./properties && cat configure_kayenta.sh | envsubst)"
+  "$(source ./properties && cat configure_kayenta.sh | envsubst)"
 
 bold "Applying configuration changes to deployment..."
 
 kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-    "hal deploy apply"
+  "hal deploy apply"
 
 deploy_ready() {
   printf "Waiting on $2 to come online"
