@@ -148,8 +148,7 @@ data:
   front50-local.yml: |
     spinnaker.s3.versioning: false
   redis.yml: |
-    # This needs to be parameterized:
-    overrideBaseUrl: redis://10.0.0.11:6379
+    overrideBaseUrl: redis://$REDIS_INSTANCE_HOST:6379
     skipLifeCycleManagement: true
   gate-local.yml: |
     redis.configuration.secure: true

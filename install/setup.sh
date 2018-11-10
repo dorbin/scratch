@@ -97,7 +97,7 @@ gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $P
 
 bold "Provisioning Spinnaker resources..."
 
-kubectl apply -f quick-install.yml
+envsubst < quick-install.yml | kubectl apply -f -
 
 job_ready() {
   printf "Waiting on $2 to come online"
