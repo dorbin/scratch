@@ -14,18 +14,26 @@ bold "Enabling required APIs..."
 
 gcloud services --project $PROJECT_ID enable container.googleapis.com monitoring.googleapis.com
 
-bold "Creating service account $SERVICE_ACCOUNT_NAME..."
-# bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
-
-gcloud iam service-accounts --project $PROJECT_ID create \
-  $SERVICE_ACCOUNT_NAME \
-  --display-name $SERVICE_ACCOUNT_NAME
-
 SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
   --filter="displayName:$SERVICE_ACCOUNT_NAME" \
   --format='value(email)')
 
+if [ -z "$SA_EMAIL" ]; then
+  bold "Creating service account $SERVICE_ACCOUNT_NAME..."
+
+  gcloud iam service-accounts --project $PROJECT_ID create \
+    $SERVICE_ACCOUNT_NAME \
+    --display-name $SERVICE_ACCOUNT_NAME
+
+  SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
+    --filter="displayName:$SERVICE_ACCOUNT_NAME" \
+    --format='value(email)')
+else
+  bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
+fi
+
 # TODO: What exact roles are required?
+bold "Adding required roles to $SERVICE_ACCOUNT_NAME..."
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SA_EMAIL \
   --role roles/owner
@@ -33,7 +41,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 bold "Creating bucket $BUCKET_URI..."
 # bold "Using existing bucket $BUCKET_URI..."
 
-gsutil mb -p $PROJECT_ID gs://$BUCKET_URI
+gsutil mb -p $PROJECT_ID $BUCKET_URI
 
 
 
