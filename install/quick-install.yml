@@ -150,6 +150,9 @@ data:
     skipLifeCycleManagement: true
   gate.yml: |
     host: 0.0.0.0
+    redis:
+      configuration:
+        secure: true
   deck.yml: |
     host: 0.0.0.0
     env:
