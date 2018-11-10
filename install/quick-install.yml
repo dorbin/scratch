@@ -100,11 +100,14 @@ spec:
           mountPath: /home/spinnaker/staging/.hal/default/service-settings/fiat.yml
           subPath: fiat.yml
         - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/service-settings/redis.yml
+          subPath: redis.yml
+        - name: halconfig
           mountPath: /home/spinnaker/staging/.hal/default/profiles/front50-local.yml
           subPath: front50-local.yml
         - name: halconfig
-          mountPath: /home/spinnaker/staging/.hal/default/service-settings/redis.yml
-          subPath: redis.yml
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/gate-local.yml
+          subPath: gate-local.yml
       volumes:
       - name: halconfig
         configMap:
@@ -148,11 +151,10 @@ data:
     # This needs to be parameterized:
     overrideBaseUrl: redis://10.0.0.11:6379
     skipLifeCycleManagement: true
+  gate-local.yml: |
+    redis.configuration.secure: true
   gate.yml: |
     host: 0.0.0.0
-    redis:
-      configuration:
-        secure: true
   deck.yml: |
     host: 0.0.0.0
     env:
