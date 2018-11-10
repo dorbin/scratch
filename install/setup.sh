@@ -74,11 +74,8 @@ else
   bold "Using existing GKE cluster $GKE_CLUSTER..."
 fi
 
-#gcloud beta container --project $PROJECT_ID clusters create $CLUSTER_NAME --zone $ZONE --username "admin" --cluster-version "1.11.2" --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" --enable-stackdriver-kubernetes --addons HorizontalPodAutoscaling,HttpLoadBalancing --enable-autoupgrade --enable-autorepair
-
-
 bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
 
 gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
-#kubectl apply -f quick-install.yml
+kubectl apply -f quick-install.yml
