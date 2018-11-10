@@ -18,17 +18,11 @@ Configure the environment.
 cd install && ./setup_properties.sh
 ```
 
-Verify the environment variables that will be used for your Spinnaker installation.
+Verify (or modify) the environment variables that will be used for your Spinnaker installation.
 
-<walkthrough-editor-open-file filePath="properties"
+<walkthrough-editor-open-file filePath="scratch/install/properties"
                               text="Open properties file">
 </walkthrough-editor-open-file>
-
-Or do this:
-
-<walkthrough-editor-spotlight spotlightId="navigator" filePath="properties"
-                              text="My properties file">
-</walkthrough-editor-spotlight>
 
 Begin the installation (this will take a while).
 

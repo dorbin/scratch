@@ -8,9 +8,9 @@ fi
 cat >properties <<EOL
 #!/usr/bin/env bash
 
-PROJECT_ID=$PROJECT_ID
-GKE_CLUSTER=spin-demo
-ZONE=us-west1-b
+export PROJECT_ID=$PROJECT_ID
+export GKE_CLUSTER=spin-demo
+export ZONE=us-west1-b
 EOL
 
 #if [ -f bucket.txt ]; then
