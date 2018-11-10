@@ -96,5 +96,5 @@ kubectl -n spinnaker port-forward $DECK_POD 8080:9000
 
 <walkthrough-spotlight-pointer
     spotlightId="devshell-web-preview-button"
-    text="Connect to Spinnaker via Web Preview on 8080">
+    text="Connect to Spinnaker via 'Preview on port 8080'">
 </walkthrough-spotlight-pointer>
