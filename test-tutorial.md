@@ -60,3 +60,19 @@ kubectl exec $HALYARD_POD -n spinnaker \
 kubectl exec $HALYARD_POD -n spinnaker \
   -- bash -c "$(source ./properties && cat enable_kayenta.sh | envsubst)"
 ```
+
+## Connect to Spinnaker
+
+### Locate Halyard Pod
+
+```bash
+DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \
+    -o=jsonpath='{.items[0].metadata.name}')
+```
+
+```bash
+kubectl -n spinnaker port-forward $DECK_POD 8080:9000
+```
+
+<walkthrough-spotlight-pointer spotlightId="devshell-web-preview-button" text="Connect to it...">
+</walkthrough-spotlight-pointer>
