@@ -117,7 +117,7 @@ kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
 deploy_ready() {
   printf "Waiting on $2 to come online"
   while [[ "$(kubectl get deploy $1 -n spinnaker -o \
-            jsonpath="{.status.readyReplicas}")" ==
+            jsonpath="{.status.readyReplicas}")" != \
            "$(kubectl get deploy $1 -n spinnaker -o \
             jsonpath="{.status.replicas}")" ]]; do
     printf "."
