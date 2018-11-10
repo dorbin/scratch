@@ -12,7 +12,7 @@ Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon 
 export PROJECT_ID={{project-id}}
 ```
 
-Configure the environment.
+### Configure the environment.
 
 ```bash
 # Protect existing properties file
@@ -25,20 +25,10 @@ Verify (or modify) the environment variables that will be used for your Spinnake
                               text="Open properties file">
 </walkthrough-editor-open-file>
 
-Begin the installation (this will take a while).
+### Begin the installation (this will take a while).
 
 ```bash
 ./setup.sh
 ```
 
-### Part 3
-
-Part Three Instructions.
-
-### Part 4
-
-Part Four Instructions.
-
-## Conclusion
-
-Done!
+Once the setup process completes, continue to the next step.
