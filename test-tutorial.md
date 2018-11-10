@@ -2,7 +2,8 @@
 
 ## GCP Project Selection
 
-<walkthrough-project-billing-setup></walkthrough-project-billing-setup>
+<walkthrough-project-billing-setup>
+</walkthrough-project-billing-setup>
 
 ## Spinnaker Installation
 
@@ -20,8 +21,9 @@ cd ~/scratch/install && ./setup_properties.sh
 
 Verify (or modify) the environment variables that will be used for your Spinnaker installation.
 
-<walkthrough-editor-open-file filePath="scratch/install/properties"
-                              text="Open properties file">
+<walkthrough-editor-open-file
+    filePath="scratch/install/properties"
+    text="Open properties file">
 </walkthrough-editor-open-file>
 
 ### Begin the installation (this will take a while).
@@ -44,35 +46,41 @@ watch kubectl get po -n spinnaker
 
 ```bash
 HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
-  -o jsonpath="{.items[0].metadata.name}")
+    -o jsonpath="{.items[0].metadata.name}")
 ```
 
 ### Enable Persistent Storage
 
 ```bash
-kubectl exec $HALYARD_POD -n spinnaker \
-  -- bash -c "$(source ./properties && cat enable_persistent_storage.sh | envsubst)"
+kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
+    cat enable_persistent_storage.sh | envsubst)"
 ```
 
 ### Enable Kayenta
 
 ```bash
-kubectl exec $HALYARD_POD -n spinnaker \
-  -- bash -c "$(source ./properties && cat enable_kayenta.sh | envsubst)"
+kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
+    cat enable_kayenta.sh | envsubst)"
 ```
 
 ## Connect to Spinnaker
 
-### Locate Halyard Pod
+### Locate Deck Pod
 
 ```bash
 DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \
     -o=jsonpath='{.items[0].metadata.name}')
 ```
 
+### Forward Port to Deck
+
 ```bash
 kubectl -n spinnaker port-forward $DECK_POD 8080:9000
 ```
 
-<walkthrough-spotlight-pointer spotlightId="devshell-web-preview-button" text="Connect to it...">
+### Connect to Deck
+
+<walkthrough-spotlight-pointer
+    spotlightId="devshell-web-preview-button"
+    text="Connect to Spinnaker via Web Preview on 8080">
 </walkthrough-spotlight-pointer>
