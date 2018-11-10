@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 
+bold() {
+  echo ". $(tput bold)" "$*" "$(tput sgr0)";
+}
+
+err() {
+  echo "$*" >&2;
+}
+
 source ./properties
+
+bold "Enabling required APIs..."
 
 gcloud services --project $PROJECT_ID enable container.googleapis.com monitoring.googleapis.com
 
+bold "Creating service account $SERVICE_ACCOUNT_NAME..."
+# bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
 
 gcloud iam service-accounts --project $PROJECT_ID create \
   $SERVICE_ACCOUNT_NAME \
@@ -18,7 +30,10 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SA_EMAIL \
   --role roles/owner
 
-gsutil mb -p $PROJECT_ID gs://$BUCKET_NAME
+bold "Creating bucket $BUCKET_URI..."
+# bold "Using existing bucket $BUCKET_URI..."
+
+gsutil mb -p $PROJECT_ID gs://$BUCKET_URI
 
 
 
