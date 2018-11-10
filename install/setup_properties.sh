@@ -9,8 +9,12 @@ cat >properties <<EOL
 #!/usr/bin/env bash
 
 export PROJECT_ID=$PROJECT_ID
-export GKE_CLUSTER=spin-demo
+export GKE_CLUSTER=spin-deployment
 export ZONE=us-west1-b
+
+export SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
+
+export BUCKET_NAME="spin-gcs-bucket-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 EOL
 
 #if [ -f bucket.txt ]; then

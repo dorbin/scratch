@@ -15,7 +15,8 @@ export PROJECT_ID={{project-id}}
 Configure the environment.
 
 ```bash
-cd install && ./setup_properties.sh
+# Protect existing properties file
+cd ~/scratch/install && ./setup_properties.sh
 ```
 
 Verify (or modify) the environment variables that will be used for your Spinnaker installation.
