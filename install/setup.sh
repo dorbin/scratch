@@ -43,7 +43,8 @@ fi
 bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SA_EMAIL \
-  --role roles/owner
+  --role roles/owner \
+  --format=none
 
 # TODO: Could verify ACLs here. In the meantime, error messages should suffice.
 gsutil ls $BUCKET_URI
