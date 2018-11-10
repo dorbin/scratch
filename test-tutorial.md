@@ -63,7 +63,7 @@ kubectl exec $HALYARD_POD -n spinnaker -- bash -c "$(source ./properties &&
     cat enable_kayenta.sh | envsubst)"
 ```
 
-### Apply Changes
+## Apply Changes
 
 Have Halyard apply the changes to the running deployment.
 
