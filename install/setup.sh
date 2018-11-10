@@ -69,7 +69,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
     --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
     --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
-    --addons HorizontalPodAutoscaling,HttpLoadBalancing
+    --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing
 else
   bold "Using existing GKE cluster $GKE_CLUSTER..."
 fi
