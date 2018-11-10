@@ -102,6 +102,9 @@ spec:
         - name: halconfig
           mountPath: /home/spinnaker/staging/.hal/default/profiles/front50-local.yml
           subPath: front50-local.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/service-settings/redis.yml
+          subPath: redis.yml
       volumes:
       - name: halconfig
         configMap:
@@ -141,6 +144,10 @@ data:
     skipLifeCycleManagement: true
   front50-local.yml: |
     spinnaker.s3.versioning: false
+  redis.yml: |
+    # This needs to be parameterized:
+    overrideBaseUrl: redis://10.0.0.11:6379
+    skipLifeCycleManagement: true
   gate.yml: |
     host: 0.0.0.0
   deck.yml: |
