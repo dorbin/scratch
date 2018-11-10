@@ -7,7 +7,7 @@
 ## Spinnaker Installation
 
 ```bash
-setup.sh
+cd install && ./setup.sh
 ```
 
 ### Part 3
