@@ -15,7 +15,6 @@ export PROJECT_ID={{project-id}}
 ### Configure the environment.
 
 ```bash
-# Protect existing properties file
 cd ~/scratch/install && ./setup_properties.sh
 ```
 
@@ -32,3 +31,26 @@ Verify (or modify) the environment variables that will be used for your Spinnake
 ```
 
 Once the setup process completes, continue to the next step.
+
+## Modify Spinnaker Deployment
+
+### Locate Halyard Pod
+
+```bash
+HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
+  -o jsonpath="{.items[0].metadata.name}")
+```
+
+### Enable Persistent Storage
+
+```bash
+kubectl exec $HALYARD_POD -n spinnaker \
+  -- bash -c "$(cat enable_persistent_storage.sh | envsubst)"
+```
+
+### Enable Kayenta
+
+```bash
+kubectl exec $HALYARD_POD -n spinnaker \
+  -- bash -c "$(cat enable_kayenta.sh | envsubst)"
+```
