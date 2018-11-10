@@ -6,6 +6,8 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 cat >properties <<EOL
+#!/usr/bin/env bash
+
 PROJECT_ID=$PROJECT_ID
 GKE_CLUSTER=spin-demo
 ZONE=us-west1-b
