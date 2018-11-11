@@ -40,7 +40,7 @@ Once the setup script completes, continue to the next step.
 
 ```bash
 DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \
-    -o=jsonpath='{.items[0].metadata.name}')
+  -o=jsonpath='{.items[0].metadata.name}')
 ```
 
 ### Forward Port to Deck
