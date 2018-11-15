@@ -40,7 +40,7 @@ else
   bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
 fi
 
-# TODO: What exact roles are required?
+# TODO: What exact roles/permissions are required?
 bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
