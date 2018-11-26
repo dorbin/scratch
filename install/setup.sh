@@ -134,4 +134,6 @@ deploy_ready spin-orca "orchestration engine"
 deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
 
-./expose/expose.sh
+pushd expose
+./expose.sh
+popd
