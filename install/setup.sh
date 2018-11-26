@@ -10,7 +10,7 @@ err() {
 
 source ./properties
 
-REQUIRED_APIS="container.googleapis.com monitoring.googleapis.com redis.googleapis.com"
+REQUIRED_APIS="container.googleapis.com endpoints.googleapis.com monitoring.googleapis.com redis.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
   --filter="config.name:($REQUIRED_APIS)" \
@@ -133,3 +133,5 @@ deploy_ready spin-front50 "storage server"
 deploy_ready spin-orca "orchestration engine"
 deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
+
+./expose/expose.sh
