@@ -235,17 +235,14 @@ data:
         gitConfig:
           upstreamUser: spinnaker
       persistentStorage:
-        persistentStoreType: s3
+        persistentStoreType: gcs
         azs: {}
         gcs:
+          project: $PROJECT_ID
+          bucket: $BUCKET_NAME
           rootFolder: front50
         redis: {}
-        s3:
-          bucket: spinnaker-artifacts
-          rootFolder: front50
-          endpoint: http://minio-service.spinnaker:9000
-          accessKeyId: dont-use-this
-          secretAccessKey: for-production
+        s3: {}
         oraclebmcs: {}
       features:
         auth: false
@@ -324,10 +321,18 @@ data:
         enabled: true
         serviceIntegrations:
         - name: google
-          enabled: false
-          accounts: []
-          gcsEnabled: false
-          stackdriverEnabled: false
+          enabled: true
+          accounts:
+          - name: my-google-account
+            project: $PROJECT_ID
+            bucket: $BUCKET_NAME
+            rootFolder: kayenta
+            supportedTypes:
+            - METRICS_STORE
+            - CONFIGURATION_STORE
+            - OBJECT_STORE
+          gcsEnabled: true
+          stackdriverEnabled: true
         - name: prometheus
           enabled: false
           accounts: []
@@ -338,92 +343,14 @@ data:
           enabled: false
           accounts: []
         - name: aws
-          enabled: true
-          accounts:
-          - name: kayenta-minio
-            bucket: spinnaker-artifacts
-            rootFolder: kayenta
-            endpoint: http://minio-service.spinnaker:9000
-            accessKeyId: dont-use-this
-            secretAccessKey: for-production
-            supportedTypes:
-            - CONFIGURATION_STORE
-            - OBJECT_STORE
-          s3Enabled: true
+          enabled: false
+          accounts: []
+          s3Enabled: false
         reduxLoggerEnabled: true
         defaultJudge: NetflixACAJudge-v1.0
         stagesEnabled: true
         templatesEnabled: true
         showAllConfigsEnabled: true
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: minio-pv-claim
-  namespace: spinnaker
-  labels:
-    app: minio-storage-claim
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: standard
-
----
-
-apiVersion: apps/v1beta1
-kind: Deployment
-metadata:
-  # This name uniquely identifies the Deployment
-  name: minio-deployment
-  namespace: spinnaker
-spec:
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: minio
-    spec:
-      volumes:
-      - name: storage
-        persistentVolumeClaim:
-          claimName: minio-pv-claim
-      containers:
-      - name: minio
-        image: minio/minio
-        args:
-        - server
-        - /storage
-        env:
-        - name: MINIO_ACCESS_KEY
-          value: "dont-use-this"
-        - name: MINIO_SECRET_KEY
-          value: "for-production"
-        ports:
-        - containerPort: 9000
-        volumeMounts:
-        - name: storage
-          mountPath: /storage
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: minio-service
-  namespace: spinnaker
-spec:
-  ports:
-    - port: 9000
-      targetPort: 9000
-      protocol: TCP
-  selector:
-    app: minio
-
 ---
 
 apiVersion: batch/v1

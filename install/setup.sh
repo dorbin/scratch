@@ -116,26 +116,6 @@ job_ready() {
 
 job_ready hal-deploy-apply deployment
 
-bold "Modifying base Spinnaker deployment..."
-
-HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
-  -o jsonpath="{.items[0].metadata.name}")
-
-bold "Configuring persistent storage..."
-
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-  "$(source ./properties && cat configure_persistent_storage.sh | envsubst)"
-
-bold "Configuring canary analysis..."
-
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-  "$(source ./properties && cat configure_kayenta.sh | envsubst)"
-
-bold "Applying configuration changes to deployment..."
-
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-  "hal deploy apply"
-
 deploy_ready() {
   printf "Waiting on $2 to come online"
   while [[ "$(kubectl get deploy $1 -n spinnaker -o \
