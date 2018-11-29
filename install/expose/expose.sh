@@ -4,10 +4,6 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-export STATIC_IP_NAME=spinnaker-external-ip
-export MANAGED_CERT=spinnaker-managed-cert
-export DOMAIN_NAME=spinnaker.endpoints.$PROJECT_ID.cloud.goog
-
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
   --format="value(address)" --global --project $PROJECT_ID)
 
@@ -22,17 +18,32 @@ else
    bold "Using existing static IP address $STATIC_IP_NAME ($IP_ADDR)..."
 fi
 
-EXISTING_SERVICE_NAME=$(gcloud endpoints services list \
-  --filter="serviceName=$DOMAIN_NAME" --format="value(serviceName)" \
-  --project $PROJECT_ID)
+if [ $DOMAIN_NAME = "spinnaker.endpoints.$PROJECT_ID.cloud.goog" ]; then
+  EXISTING_SERVICE_NAME=$(gcloud endpoints services list \
+    --filter="serviceName=$DOMAIN_NAME" --format="value(serviceName)" \
+    --project $PROJECT_ID)
 
-if [ -z "$EXISTING_SERVICE_NAME" ]; then
-  bold "Creating service endpoint $DOMAIN_NAME..."
+  if [ -z "$EXISTING_SERVICE_NAME" ]; then
+    bold "Creating service endpoint $DOMAIN_NAME..."
 
-  cat openapi.yaml | envsubst > openapi_expanded.yaml
-  gcloud endpoints services deploy openapi_expanded.yaml --project $PROJECT_ID
+    cat openapi.yaml | envsubst > openapi_expanded.yaml
+    # gcloud endpoints services deploy openapi_expanded.yaml --project $PROJECT_ID
+  else
+    bold "Using existing service endpoint $EXISTING_SERVICE_NAME..."
+  fi
 else
-  bold "Using existing service endpoint $EXISTING_SERVICE_NAME..."
+  CURRENT_IP_ADDR=$(dig +short $DOMAIN_NAME)
+
+  if [ -z "$CURRENT_IP_ADDR" ]; then
+    CURRENT_IP_ADDR="UNRESOLVABLE"
+  fi
+
+  bold "Using existing domain $DOMAIN_NAME ($CURRENT_IP_ADDR)..."
+
+  if [ $CURRENT_IP_ADDR != $IP_ADDR ]; then
+    bold "** This domain currently resolves to $CURRENT_IP_ADDR
+   ** You must configure $DOMAIN_NAME's DNS settings such that it instead resolves to $IP_ADDR"
+  fi
 fi
 
 EXISTING_MANAGED_CERT=$(gcloud beta compute ssl-certificates list \
