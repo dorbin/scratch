@@ -27,7 +27,7 @@ if [ $DOMAIN_NAME = "spinnaker.endpoints.$PROJECT_ID.cloud.goog" ]; then
     bold "Creating service endpoint $DOMAIN_NAME..."
 
     cat openapi.yaml | envsubst > openapi_expanded.yaml
-    # gcloud endpoints services deploy openapi_expanded.yaml --project $PROJECT_ID
+    gcloud endpoints services deploy openapi_expanded.yaml --project $PROJECT_ID
   else
     bold "Using existing service endpoint $EXISTING_SERVICE_NAME..."
   fi
