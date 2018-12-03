@@ -4,6 +4,8 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+source ./properties
+
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
   --format="value(address)" --global --project $PROJECT_ID)
 
@@ -26,8 +28,8 @@ if [ $DOMAIN_NAME = "spinnaker.endpoints.$PROJECT_ID.cloud.goog" ]; then
   if [ -z "$EXISTING_SERVICE_NAME" ]; then
     bold "Creating service endpoint $DOMAIN_NAME..."
 
-    cat openapi.yaml | envsubst > openapi_expanded.yaml
-    gcloud endpoints services deploy openapi_expanded.yaml --project $PROJECT_ID
+    cat expose/openapi.yml | envsubst > expose/openapi_expanded.yml
+    gcloud endpoints services deploy expose/openapi_expanded.yml --project $PROJECT_ID
   else
     bold "Using existing service endpoint $EXISTING_SERVICE_NAME..."
   fi
@@ -91,7 +93,7 @@ fi
 
 
 # Create ingress:
-bold $(envsubst < deck-ingress.yml | kubectl apply -f -)
+bold $(envsubst < expose/deck-ingress.yml | kubectl apply -f -)
 
 
 

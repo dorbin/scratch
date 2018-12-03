@@ -55,3 +55,12 @@ kubectl -n spinnaker port-forward $DECK_POD 8080:9000
     spotlightId="devshell-web-preview-button"
     text="Connect to Spinnaker via 'Preview on port 8080'">
 </walkthrough-spotlight-pointer>
+
+### Expose Spinnaker
+
+If you would like to connect to Spinnaker without relying on port forwarding, we can
+expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.google.com/iap/).
+
+```bash
+./expose/expose.sh
+```
