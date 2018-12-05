@@ -1,0 +1,13 @@
+{
+  "policy": {
+    "etag": $IAP_IAM_POLICY_ETAG,
+    "bindings": [
+      {
+        "role": "roles/iap.httpsResourceAccessor",
+        "members": [
+          "user:$IAP_USER"
+        ]
+      }
+    ]
+  }
+}

@@ -60,47 +60,4 @@ else
   bold "Using existing managed SSL certificate $EXISTING_MANAGED_CERT..."
 fi
 
-
-
-# Don't need this yet; not until configuring IAP.
-# Create backend config:
-
-
-
-# Will need to add this when configuring IAP:
-#metadata:
-#  annotations:
-#    beta.cloud.google.com/backend-config: '{"default": "config-default"}'
-
-
-
-# Change spin-deck service to NodePort:
-DECK_SERVICE_TYPE=$(kubectl get service -n spinnaker spin-deck \
-  --output=jsonpath={.spec.type})
-
-if [ $DECK_SERVICE_TYPE != 'NodePort' ]; then
-  bold "Patching spin-deck service to be NodePort instead of $DECK_SERVICE_TYPE..."
-
-kubectl patch service -n spinnaker spin-deck --patch \
-  "[{'op': 'replace', 'path': '/spec/type', \
-  'value':'NodePort'}]" --type json
-else
-  bold "Service spin-deck is already NodePort..."
-fi
-
-
-
-
-
-# Create ingress:
-bold $(envsubst < expose/deck-ingress.yml | kubectl apply -f -)
-
-
-
-# Update deck & gate to use hostname?:
-
-
-
-# Configure IAP:
-
-
+./expose/launch_configure_iap.sh

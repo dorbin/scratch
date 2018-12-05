@@ -26,12 +26,18 @@ export REDIS_INSTANCE=spin-redis
 export BUCKET_NAME="spin-gcs-bucket-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 export BUCKET_URI="gs://\$BUCKET_NAME"
 
+# The properties following this line are only relevant if you intend to expose your new Spinnaker instance.
+
 export STATIC_IP_NAME=spinnaker-external-ip
 export MANAGED_CERT=spinnaker-managed-cert
+export SECRET_NAME=spinnaker-oauth-client-secret
 
 # If you own a domain name and want to use that instead of this automatically-assigned one,
 # specify it here (you must be able to configure the dns settings).
 export DOMAIN_NAME=spinnaker.endpoints.$PROJECT_ID.cloud.goog
+
+# This email address will be granted permissions as an IAP-Secured Web App User.
+export IAP_USER=$(gcloud auth list --format="value(account)" --filter="status=ACTIVE")
 EOL
 fi
 
