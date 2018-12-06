@@ -4,7 +4,7 @@
 
 Go to the [OAuth consent screen](https://console.developers.google.com/apis/credentials/consent?project=$PROJECT_ID).
 
-Enter a *Product name*, enter your *Email address*, and add **$TOP_PRIVATE_DOMAIN** as an *Authorized domain*.
+Enter an *Application name* (e.g. My Spinnaker), enter your *Email address*, and add **$TOP_PRIVATE_DOMAIN** as an *Authorized domain*.
 
 ### Create OAuth credentials
 

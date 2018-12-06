@@ -64,8 +64,17 @@ export IAP_IAM_POLICY_ETAG=$(gcurl -X POST -d "{}" \
 cat expose/iap_policy.json | envsubst | gcurl -X POST -d @- \
   https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web:setIamPolicy
 
-export BACKEND_SERVICE_ID=$(gcloud compute backend-services list --project $PROJECT_ID \
-  --filter="description:spinnaker/spin-deck" --format="value(id)")
+unset BACKEND_SERVICE_ID
+
+printf "Waiting for backend service to be provisioned.."
+
+while [ -z "$BACKEND_SERVICE_ID" ]; do
+  printf "."
+  export BACKEND_SERVICE_ID=$(gcloud compute backend-services list --project $PROJECT_ID \
+    --filter="description:spinnaker/spin-deck" --format="value(id)")
+  sleep 30
+done
+echo ""
 
 echo BACKEND_SERVICE_ID=$BACKEND_SERVICE_ID
 

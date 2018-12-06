@@ -10,7 +10,7 @@ err() {
 
 source ./properties
 
-REQUIRED_APIS="container.googleapis.com endpoints.googleapis.com monitoring.googleapis.com redis.googleapis.com"
+REQUIRED_APIS="container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
   --filter="config.name:($REQUIRED_APIS)" \
