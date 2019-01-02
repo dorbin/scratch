@@ -57,7 +57,7 @@ if [ -z "$REDIS_INSTANCE_HOST" ]; then
   bold "Creating redis instance $REDIS_INSTANCE..."
 
   gcloud redis instances create $REDIS_INSTANCE --project $PROJECT_ID \
-    --region=$REGION --zone=$ZONE
+    --region=$REGION --zone=$ZONE --redis-config=notify-keyspace-events=gxE
 
   export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
     --project $PROJECT_ID --region $REGION \
