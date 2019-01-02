@@ -56,6 +56,11 @@ kubectl -n spinnaker port-forward $DECK_POD 8080:9000
     text="Connect to Spinnaker via 'Preview on port 8080'">
 </walkthrough-spotlight-pointer>
 
+### View Spinnaker Audit Log
+
+View the who, what, when and where of your Spinnaker installation
+[here](https://console.developers.google.com/logs/viewer?project={{project-id}}&resource=cloud_function&logName=projects%2F{{project-id}}%2Flogs%2FmySpinnakerAuditLog&minLogLevel=200).
+
 ### Expose Spinnaker
 
 If you would like to connect to Spinnaker without relying on port forwarding, we can
