@@ -10,7 +10,7 @@ err() {
 
 source ./properties
 
-REQUIRED_APIS="container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com"
+REQUIRED_APIS="cloudfunctions.googleapis.com container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
   --filter="config.name:($REQUIRED_APIS)" \
@@ -115,6 +115,19 @@ job_ready() {
 }
 
 job_ready hal-deploy-apply deployment
+
+EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
+  --format="value(name)" --filter="entryPoint=spinnakerAuditLog")
+
+if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
+  bold "Deploying audit log cloud function spinnakerAuditLog..."
+
+  cat spinnakerAuditLog/config_json.template | envsubst > spinnakerAuditLog/config.json
+  gcloud functions deploy spinnakerAuditLog --source spinnakerAuditLog \
+    --trigger-http --memory 2048MB --project $PROJECT_ID
+else
+  bold "Using existing audit log cloud function spinnakerAuditLog..."
+fi
 
 deploy_ready() {
   printf "Waiting on $2 to come online"

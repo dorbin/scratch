@@ -103,6 +103,9 @@ spec:
           mountPath: /home/spinnaker/staging/.hal/default/service-settings/redis.yml
           subPath: redis.yml
         - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/echo-local.yml
+          subPath: echo-local.yml
+        - name: halconfig
           mountPath: /home/spinnaker/staging/.hal/default/profiles/front50-local.yml
           subPath: front50-local.yml
         - name: halconfig
@@ -145,6 +148,16 @@ data:
   fiat.yml: |
     enabled: false
     skipLifeCycleManagement: true
+  echo-local.yml: |
+    rest:
+      enabled: true
+      endpoints:
+        - wrap: true
+          flatten: false
+          url: https://us-central1-$PROJECT_ID.cloudfunctions.net/spinnakerAuditLog
+          username: $AUDIT_LOG_UNAME
+          password: $AUDIT_LOG_PW
+          eventName: spinnaker_events
   front50-local.yml: |
     spinnaker.s3.versioning: false
   redis.yml: |
@@ -264,7 +277,7 @@ data:
       notifications:
         slack:
           enabled: false
-      timezone: America/Los_Angeles
+      timezone: $TIMEZONE
       ci:
         jenkins:
           enabled: false

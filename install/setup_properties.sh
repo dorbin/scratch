@@ -16,6 +16,9 @@ export GKE_CLUSTER=spin-deployment
 export REGION=us-west1
 export ZONE=us-west1-b
 
+# See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+export TIMEZONE=$(cat /etc/timezone)
+
 # If service account does not exist, it will be created.
 export SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
 
@@ -25,6 +28,10 @@ export REDIS_INSTANCE=spin-redis
 # If bucket does not exist, it will be created.
 export BUCKET_NAME="spin-gcs-bucket-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 export BUCKET_URI="gs://\$BUCKET_NAME"
+
+# Used to authenticate calls to the audit log Cloud Function.
+export AUDIT_LOG_UNAME="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
+export AUDIT_LOG_PW="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 
 # The properties following this line are only relevant if you intend to expose your new Spinnaker instance.
 
