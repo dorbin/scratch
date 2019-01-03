@@ -23,3 +23,8 @@ This phase could take 30-60 minutes.
 ## Conclusion
 
 Connect to your Spinnaker installation [here](https://$DOMAIN_NAME).
+
+### View Spinnaker Audit Log
+
+View the who, what, when and where of your Spinnaker installation
+[here](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=cloud_function&logName=projects%2F$PROJECT_ID%2Flogs%2FmySpinnakerAuditLog&minLogLevel=200).
