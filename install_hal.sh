@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 curl -O https://raw.githubusercontent.com/spinnaker/halyard/master/install/debian/InstallHalyard.sh
-sudo bash InstallHalyard.sh -y
+sudo bash InstallHalyard.sh -y $@
+
+retVal=$?
+if [ $retVal == 13 ]; then
+  exit 13
+fi
 
 mkdir -p ~/hal/log
 sudo mv /etc/bash_completion.d/hal ~/hal/hal_completion
@@ -17,4 +22,3 @@ sudo sed -i s:/opt/spinnaker:~/hal/spinnaker:g ~/hal/halyard/bin/halyard
 sed -i 's:rm -rf /opt/halyard:rm -rf /home/duftler/hal/halyard:g' ~/hal/update-halyard
 sed -i s:/opt/spinnaker:/home/duftler/hal/spinnaker:g ~/hal/update-halyard
 sed -i s:/etc/bash_completion.d/hal:/home/duftler/hal/hal_completion: ~/hal/update-halyard
-
