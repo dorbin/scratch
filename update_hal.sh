@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+HAL_USER=$(cat /home/duftler/hal/spinnaker/config/halyard-user)
+
+if [ -z "$HAL_USER" ]; then
+  echo >&2 "Unable to derive halyard user, likely a corrupted install. Aborting."
+  exit 1
+fi
+
+sudo groupadd halyard || true
+sudo groupadd spinnaker || true
+sudo usermod -G halyard -a $HAL_USER || true
+sudo usermod -G spinnaker -a $HAL_USER || true
+
+sudo mkdir -p /var/log/spinnaker/halyard
+sudo chown $HAL_USER:halyard /var/log/spinnaker/halyard
+sudo chmod 755 /var/log/spinnaker /var/log/spinnaker/halyard
+
 sudo ~/hal/update-halyard $@
 
 retVal=$?
