@@ -87,7 +87,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
 
   # TODO: Move some of these config settings to properties file.
   gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --username "admin" --cluster-version "1.11.2" \
+    --zone $ZONE --username "admin" --cluster-version "1.11.6" \
     --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
     --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \

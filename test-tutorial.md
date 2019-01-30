@@ -46,7 +46,7 @@ DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \
 ### Forward Port to Deck
 
 ```bash
-kubectl -n spinnaker port-forward $DECK_POD 8080:9000
+kubectl -n spinnaker port-forward $DECK_POD 8080:9000 > /dev/null 2>&1 &
 ```
 
 ### Connect to Deck
