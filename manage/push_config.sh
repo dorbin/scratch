@@ -58,8 +58,7 @@ done
 close_volume_mounts_patch_file
 
 CONFIG_MAP_NAME=halconfig-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")
-HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
-  -o jsonpath="{.items[0].metadata.name}")
+HALYARD_POD=spin-halyard-0
 
 # Create the new config map.
 kubectl create cm -n spinnaker $CONFIG_MAP_NAME --from-file $TEMP_DIR/config-dir
@@ -67,18 +66,18 @@ kubectl create cm -n spinnaker $CONFIG_MAP_NAME --from-file $TEMP_DIR/config-dir
 # Remove old persistent config so staged config will be copied into place.
 kubectl -n spinnaker exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 
-# Update the deployment with the new volume mounts and config map.
-kubectl patch deployment -n spinnaker spin-halyard --patch \
+# Update the statefulset with the new volume mounts and config map.
+kubectl patch statefulset -n spinnaker spin-halyard --patch \
   "[{'op': 'replace', 'path': '/spec/template/spec/containers/0/volumeMounts', \
   'value':$(cat $TEMP_DIR/patch-file-volume-mounts.json)}, {'op': 'replace', \
   'path': '/spec/template/spec/volumes/0', 'value':{'name':'halconfig',\
   'configMap':{'name':'$CONFIG_MAP_NAME'}}}]" --type json
 
-deploy_ready() {
+statefulset_ready() {
   printf "Waiting on $2 to restart"
-  while [[ "$(kubectl get deploy $1 -n spinnaker -o \
+  while [[ "$(kubectl get statefulset $1 -n spinnaker -o \
             jsonpath="{.status.readyReplicas}")" != \
-           "$(kubectl get deploy $1 -n spinnaker -o \
+           "$(kubectl get statefulset $1 -n spinnaker -o \
             jsonpath="{.status.replicas}")" ]]; do
     printf "."
     sleep 5
@@ -86,9 +85,7 @@ deploy_ready() {
   echo ""
 }
 
-deploy_ready spin-halyard "Halyard"
-
-ls -l config-dir
+statefulset_ready spin-halyard "Halyard"
 
 popd
 

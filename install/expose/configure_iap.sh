@@ -82,8 +82,7 @@ export AUD_CLAIM=/projects/$PROJECT_NUMBER/global/backendServices/$BACKEND_SERVI
 
 echo AUD_CLAIM=$AUD_CLAIM
 
-HALYARD_POD=$(kubectl get po -n spinnaker -l "stack=halyard" \
-  -o jsonpath="{.items[0].metadata.name}")
+HALYARD_POD=spin-halyard-0
 
 bold "Configuring Spinnaker security settings..."
 

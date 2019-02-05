@@ -37,8 +37,8 @@ spec:
 
 ---
 
-apiVersion: apps/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: spin-halyard
   namespace: spinnaker
@@ -46,6 +46,7 @@ metadata:
     app: spin
     stack: halyard
 spec:
+  serviceName: spin-halyard
   replicas: 1
   selector:
     matchLabels:
