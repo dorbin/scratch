@@ -10,22 +10,41 @@ EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
   --field-selector metadata.name=="$SECRET_NAME" \
   -o json | jq .items[0].metadata.name)
 
-echo EXISTING_SECRET_NAME=$EXISTING_SECRET_NAME
-
 if [ $EXISTING_SECRET_NAME == 'null' ]; then
   bold "Creating Kubernetes secret $SECRET_NAME..."
 
-read -sp 'Enter your OAuth credentials Client ID: ' CLIENT_ID
-echo
-read -sp 'Enter your OAuth credentials Client secret: ' CLIENT_SECRET
-echo
+  read -sp 'Enter your Primary OAuth credentials Client ID: ' CLIENT_ID
+  echo
+  read -sp 'Enter your Primary OAuth credentials Client secret: ' CLIENT_SECRET
+  echo
 
-kubectl create secret generic $SECRET_NAME -n spinnaker --from-literal=client_id=$CLIENT_ID \
-  --from-literal=client_secret=$CLIENT_SECRET
+  read -sp 'Enter your Secondary OAuth credentials Client ID: ' OTHER_CLIENT_ID
+  echo
+  read -sp 'Enter your Secondary OAuth credentials Client secret: ' OTHER_CLIENT_SECRET
+  echo
+
+  cat >~/.spin/config <<EOL
+gate:
+  endpoint: https://$DOMAIN_NAME/gate
+
+auth:
+  enabled: true
+  iap:
+    # check detailed config in https://cloud.google.com/iap/docs/authentication-howto#authenticating_from_a_desktop_app
+    oauthClientId: $OTHER_CLIENT_ID
+    oauthClientSecret: $OTHER_CLIENT_SECRET
+    iapClientId: $CLIENT_ID
+EOL
+
+  cat expose/configure_spin_iap.md | envsubst > expose/configure_spin_iap_expanded.md
+
+  kubectl create secret generic $SECRET_NAME -n spinnaker --from-literal=client_id=$CLIENT_ID \
+    --from-literal=client_secret=$CLIENT_SECRET
 else
   bold "Using existing Kubernetes secret $SECRET_NAME..."
 fi
 
+# TODO(duftler): This config should take into account value of $SECRET_NAME.
 kubectl apply -f expose/backend-config.yml
 
 # Associate deck service with backend config.
