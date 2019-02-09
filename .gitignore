@@ -1,0 +1,3 @@
+install/properties.*
+install/expose/*_expanded.*
+install/spinnakerAuditLog/config.json
