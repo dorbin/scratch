@@ -147,5 +147,5 @@ deploy_ready spin-orca "orchestration engine"
 deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
 
-./install_hal.sh
-./install_spin.sh
+../install_hal.sh
+../install_spin.sh

@@ -1,3 +1,5 @@
+install/properties
 install/properties.*
+install/InstallHalyard.sh
 install/expose/*_expanded.*
 install/spinnakerAuditLog/config.json
