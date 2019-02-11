@@ -36,6 +36,19 @@ auth:
     iapClientId: $CLIENT_ID
 EOL
 
+  sed -i '/^export IAP_CLIENT_ID=.*/d' properties
+  sed -i '/^export IAP_CLIENT_SECRET=.*/d' properties
+  sed -i '/^export OTHER_IAP_CLIENT_ID=.*/d' properties
+  sed -i '/^export OTHER_IAP_CLIENT_SECRET=.*/d' properties
+
+  cat >>properties <<EOL
+export IAP_CLIENT_ID=$CLIENT_ID
+export IAP_CLIENT_SECRET=$CLIENT_SECRET
+export OTHER_IAP_CLIENT_ID=$OTHER_CLIENT_ID
+export OTHER_IAP_CLIENT_SECRET=$OTHER_CLIENT_SECRET
+EOL
+
+  export OTHER_IAP_CLIENT_ID=$OTHER_CLIENT_ID
   cat expose/configure_spin_iap.md | envsubst > expose/configure_spin_iap_expanded.md
 
   kubectl create secret generic $SECRET_NAME -n spinnaker --from-literal=client_id=$CLIENT_ID \

@@ -20,6 +20,8 @@ Go to the [Credentials page](https://console.developers.google.com/apis/credenti
 
 Use *Application type: Other* and again note the generated *Client ID* and *Client secret* for the credentials.
 
+### Expose Spinnaker and allow for secure access via IAP
+
 ```bash
 ./expose/configure_iap.sh
 ```
