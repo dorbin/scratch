@@ -13,14 +13,9 @@ EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
 if [ $EXISTING_SECRET_NAME == 'null' ]; then
   bold "Creating Kubernetes secret $SECRET_NAME..."
 
-  read -sp 'Enter your Primary OAuth credentials Client ID: ' CLIENT_ID
+  read -sp 'Enter your OAuth credentials Client ID: ' CLIENT_ID
   echo
-  read -sp 'Enter your Primary OAuth credentials Client secret: ' CLIENT_SECRET
-  echo
-
-  read -sp 'Enter your Secondary OAuth credentials Client ID: ' OTHER_CLIENT_ID
-  echo
-  read -sp 'Enter your Secondary OAuth credentials Client secret: ' OTHER_CLIENT_SECRET
+  read -sp 'Enter your OAuth credentials Client secret: ' CLIENT_SECRET
   echo
 
   cat >~/.spin/config <<EOL
@@ -31,25 +26,9 @@ auth:
   enabled: true
   iap:
     # check detailed config in https://cloud.google.com/iap/docs/authentication-howto#authenticating_from_a_desktop_app
-    oauthClientId: $OTHER_CLIENT_ID
-    oauthClientSecret: $OTHER_CLIENT_SECRET
     iapClientId: $CLIENT_ID
+    serviceAccountKeyPath: "$HOME/.spin/key.json"
 EOL
-
-  sed -i '/^export IAP_CLIENT_ID=.*/d' properties
-  sed -i '/^export IAP_CLIENT_SECRET=.*/d' properties
-  sed -i '/^export OTHER_IAP_CLIENT_ID=.*/d' properties
-  sed -i '/^export OTHER_IAP_CLIENT_SECRET=.*/d' properties
-
-  cat >>properties <<EOL
-export IAP_CLIENT_ID=$CLIENT_ID
-export IAP_CLIENT_SECRET=$CLIENT_SECRET
-export OTHER_IAP_CLIENT_ID=$OTHER_CLIENT_ID
-export OTHER_IAP_CLIENT_SECRET=$OTHER_CLIENT_SECRET
-EOL
-
-  export OTHER_IAP_CLIENT_ID=$OTHER_CLIENT_ID
-  cat expose/configure_spin_iap.md | envsubst > expose/configure_spin_iap_expanded.md
 
   kubectl create secret generic $SECRET_NAME -n spinnaker --from-literal=client_id=$CLIENT_ID \
     --from-literal=client_secret=$CLIENT_SECRET
