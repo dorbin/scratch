@@ -29,6 +29,9 @@ auth:
     iapClientId: $CLIENT_ID
     serviceAccountKeyPath: "$HOME/.spin/key.json"
 EOL
+  gcloud iam service-accounts keys create ~/.spin/key.json \
+    --iam-account $SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+    --project $PROJECT_ID
 
   kubectl create secret generic $SECRET_NAME -n spinnaker --from-literal=client_id=$CLIENT_ID \
     --from-literal=client_secret=$CLIENT_SECRET
