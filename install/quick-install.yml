@@ -104,6 +104,9 @@ spec:
           mountPath: /home/spinnaker/staging/.hal/default/service-settings/redis.yml
           subPath: redis.yml
         - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/clouddriver-local.yml
+          subPath: clouddriver-local.yml
+        - name: halconfig
           mountPath: /home/spinnaker/staging/.hal/default/profiles/echo-local.yml
           subPath: echo-local.yml
         - name: halconfig
@@ -149,6 +152,8 @@ data:
   fiat.yml: |
     enabled: false
     skipLifeCycleManagement: true
+  clouddriver-local.yml: |
+    kubernetes.v2.managedBySuffix: gke-marketplace
   echo-local.yml: |
     rest:
       enabled: true
@@ -176,7 +181,7 @@ data:
     currentDeployment: default
     deploymentConfigurations:
     - name: default
-      version: 1.11.0
+      version: 1.12.2
       providers:
         appengine:
           enabled: false
