@@ -78,7 +78,11 @@ statefulset_ready() {
   while [[ "$(kubectl get statefulset $1 -n spinnaker -o \
             jsonpath="{.status.readyReplicas}")" != \
            "$(kubectl get statefulset $1 -n spinnaker -o \
-            jsonpath="{.status.replicas}")" ]]; do
+            jsonpath="{.status.replicas}")" || \
+           "$(kubectl get statefulset $1 -n spinnaker -o \
+            jsonpath="{.status.currentRevision}")" != \
+           "$(kubectl get statefulset $1 -n spinnaker -o \
+            jsonpath="{.status.updateRevision}")" ]]; do
     printf "."
     sleep 5
   done
@@ -88,8 +92,7 @@ statefulset_ready() {
 statefulset_ready spin-halyard "Halyard"
 
 popd
+rm -rf $TEMP_DIR
 
-# TODO: Remove temp dir.
 # TODO: Add dry-run.
 # TODO: Add 'hal deploy apply' option.
-
