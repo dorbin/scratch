@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
 
+HALYARD_DAEMON_PID_FILE=~/hal/halyard/pid
+
+function kill_daemon() {
+    pkill -F $HALYARD_DAEMON_PID_FILE
+}
+
+if [ -f "$HALYARD_DAEMON_PID_FILE" ]; then
+    HALYARD_DAEMON_PID=$(cat $HALYARD_DAEMON_PID_FILE)
+
+    set +e
+    ps $HALYARD_DAEMON_PID &> /dev/null
+    exit_code=$?
+    set -e
+
+    if [ "$exit_code" == "0" ]; then
+        kill_daemon
+    fi
+fi
+
+
 curl -O https://raw.githubusercontent.com/spinnaker/halyard/master/install/debian/InstallHalyard.sh
 sudo bash InstallHalyard.sh -y $@
 
