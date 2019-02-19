@@ -7,13 +7,11 @@ mv spin ~
 
 grep -q '^alias spin=~/spin' ~/.bashrc || echo 'alias spin=~/spin' >> ~/.bashrc
 
-if [ -f "$HOME/.spin/config" ]; then
-  mv ~/.spin/config ~/.spin/config.bak
-else
+if [ ! -f "$HOME/.spin/config" ]; then
   mkdir -p ~/.spin
-fi
-
-cat >~/.spin/config <<EOL
+  cat >~/.spin/config <<EOL
 gate:
   endpoint: http://localhost:8080/gate
 EOL
+fi
+
