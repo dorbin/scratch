@@ -7,19 +7,15 @@
 
 ## Spinnaker Installation
 
-Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon below to copy the command to your shell, and then run it from the shell by pressing Enter/Return. The Spinnaker provisioning logic will pick up the project id from the environment variable.
-
-```bash
-export PROJECT_ID={{project-id}}
-```
+Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon below to copy the command to your shell, and then run it from the shell by pressing Enter/Return.
 
 ### Configure the environment.
 
 ```bash
-cd ~/scratch/install && ./setup_properties.sh
+PROJECT_ID={{project-id}} ~/scratch/install/setup_properties.sh
 ```
 
-Verify (or modify) the environment variables that will be used for your Spinnaker installation.
+Verify (or modify) the configuration that will be used for your Spinnaker installation.
 
 <walkthrough-editor-open-file
     filePath="scratch/install/properties"
@@ -36,17 +32,10 @@ Once the setup script completes, continue to the next step.
 
 ## Connect to Spinnaker
 
-### Locate Deck Pod
-
-```bash
-DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \
-  -o=jsonpath='{.items[0].metadata.name}')
-```
-
 ### Forward Port to Deck
 
 ```bash
-kubectl -n spinnaker port-forward $DECK_POD 8080:9000 > /dev/null 2>&1 &
+~/scratch/manage/connect_unsecured.sh
 ```
 
 ### Connect to Deck

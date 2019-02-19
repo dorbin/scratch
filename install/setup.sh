@@ -124,7 +124,7 @@ if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
 
   cat spinnakerAuditLog/config_json.template | envsubst > spinnakerAuditLog/config.json
   gcloud functions deploy spinnakerAuditLog --source spinnakerAuditLog \
-    --trigger-http --memory 2048MB --project $PROJECT_ID
+    --trigger-http --memory 2048MB --runtime nodejs6 --project $PROJECT_ID
 else
   bold "Using existing audit log cloud function spinnakerAuditLog..."
 fi
