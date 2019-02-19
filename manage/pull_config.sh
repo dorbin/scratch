@@ -6,6 +6,8 @@ bold() {
 
 export HALYARD_POD=spin-halyard-0
 
-# TODO(duftler): First remove ~/.hal?
-kubectl cp spinnaker/$HALYARD_POD:/home/spinnaker/.hal ~/.hal
+bold "Removing $HOME/.hal..."
+rm -rf ~/.hal
 
+bold "Copying spinnaker/$HALYARD_POD:/home/spinnaker/.hal into $HOME/.hal..."
+kubectl cp spinnaker/$HALYARD_POD:/home/spinnaker/.hal ~/.hal
