@@ -12,7 +12,7 @@ Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon 
 ### Configure the environment.
 
 ```bash
-PROJECT_ID={{project-id}} ~/scratch/install/setup_properties.sh
+cd ~/scratch/install && PROJECT_ID={{project-id}} ./setup_properties.sh
 ```
 
 Verify (or modify) the configuration that will be used for your Spinnaker installation.
