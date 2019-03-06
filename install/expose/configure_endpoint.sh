@@ -20,7 +20,7 @@ else
    bold "Using existing static IP address $STATIC_IP_NAME ($IP_ADDR)..."
 fi
 
-if [ $DOMAIN_NAME = "spinnaker.endpoints.$PROJECT_ID.cloud.goog" ]; then
+if [ $DOMAIN_NAME = "$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog" ]; then
   EXISTING_SERVICE_NAME=$(gcloud endpoints services list \
     --filter="serviceName=$DOMAIN_NAME" --format="value(serviceName)" \
     --project $PROJECT_ID)

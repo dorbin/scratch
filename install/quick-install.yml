@@ -181,7 +181,7 @@ data:
     currentDeployment: default
     deploymentConfigurations:
     - name: default
-      version: 1.12.2
+      version: $SPINNAKER_VERSION
       providers:
         appengine:
           enabled: false

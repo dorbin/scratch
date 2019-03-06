@@ -2,7 +2,7 @@
 
 source ./properties
 
-if [ $DOMAIN_NAME = "spinnaker.endpoints.$PROJECT_ID.cloud.goog" ]; then
+if [ $DOMAIN_NAME = "$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog" ]; then
   export TOP_PRIVATE_DOMAIN=$PROJECT_ID.cloud.goog
 else
   export TOP_PRIVATE_DOMAIN=$DOMAIN_NAME

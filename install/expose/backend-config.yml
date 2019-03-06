@@ -7,4 +7,4 @@ spec:
   iap:
     enabled: true
     oauthclientCredentials:
-      secretName: spinnaker-oauth-client-secret
+      secretName: $SECRET_NAME

@@ -74,6 +74,7 @@ if [ $? != 0 ]; then
   bold "Creating bucket $BUCKET_URI..."
 
   gsutil mb -p $PROJECT_ID $BUCKET_URI
+  gsutil versioning set on $BUCKET_URI
 else
   bold "Using existing bucket $BUCKET_URI..."
 fi
@@ -105,7 +106,7 @@ bold "Provisioning Spinnaker resources..."
 envsubst < quick-install.yml | kubectl apply -f -
 
 job_ready() {
-  printf "Waiting on $2 to come online"
+  printf "Waiting on job $1 to complete"
   while [[ "$(kubectl get job $1 -n spinnaker -o \
             jsonpath="{.status.succeeded}")" != "1" ]]; do
     printf "."
@@ -114,7 +115,9 @@ job_ready() {
   echo ""
 }
 
-job_ready hal-deploy-apply deployment
+job_ready hal-deploy-apply
+
+../c2d/deploy_application.sh
 
 EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
   --format="value(name)" --filter="entryPoint=spinnakerAuditLog")

@@ -39,8 +39,7 @@ else
   bold "Using existing Kubernetes secret $SECRET_NAME..."
 fi
 
-# TODO(duftler): This config should take into account value of $SECRET_NAME.
-kubectl apply -f expose/backend-config.yml
+envsubst < expose/backend-config.yml | kubectl apply -f -
 
 # Associate deck service with backend config.
 kubectl patch svc -n spinnaker spin-deck --patch \
@@ -102,6 +101,8 @@ bold "Configuring Spinnaker security settings..."
 
 kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
   "$(source ./properties && cat expose/configure_hal_security.sh | envsubst)"
+
+../c2d/deploy_application.sh
 
 # # What about CORS?
 
