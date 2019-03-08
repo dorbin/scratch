@@ -4,6 +4,8 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+source ~/scratch/install/properties
+
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
 pushd $TEMP_DIR
 
@@ -29,6 +31,11 @@ if [ "$FOUND_TOKEN" == "0" ]; then
   bold "Rewriting kubeconfigFile path to reflect user 'spinnaker' on Halyard Daemon pod..."
   sed -i "s/kubeconfigFile: \/home\/$USER/kubeconfigFile: \/home\/spinnaker/" .hal/config
 fi
+
+HALCONFIG_ARCHIVE_FILENAME=halconfig-$(date +%Y%m%d%H%M%S -u).tar.gz
+bold "Backing up $HOME/.hal to $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME..."
+tar cfz $HALCONFIG_ARCHIVE_FILENAME .hal
+gsutil -q cp $HALCONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME
 
 HALYARD_POD=spin-halyard-0
 
