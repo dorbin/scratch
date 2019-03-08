@@ -1,98 +1,47 @@
 #!/usr/bin/env bash
 
-flatten() {
-  MOUNT_PATH=$(echo $1 | sed "s/home\/$USER/home\/spinnaker\/staging/")
-  SUB_PATH=$(echo $1 | rev | cut -d '/' -f 1 | rev)
-
-  # Check for filename collision at destination. If present, prefix with hash of filepath.
-  if [ -f "config-dir/$SUB_PATH" ]; then
-    SUB_PATH="$(echo $1 | md5sum | cut -f 1 -d " ")-$SUB_PATH"
-  fi
-
-  cp $1 config-dir/$SUB_PATH
-
-  cat >>$VOLUME_MOUNTS_JSON_PATCH_FILE <<EOL
-  {
-    "name": "halconfig",
-    "mountPath": "$MOUNT_PATH",
-    "subPath": "$SUB_PATH"
-  },
-EOL
-}
-
-open_volume_mounts_patch_file() {
-  cat >>$VOLUME_MOUNTS_JSON_PATCH_FILE <<EOL
-[
-  {
-    "name": "persistentconfig",
-    "mountPath": "/home/spinnaker/.hal"
-  },
-  {
-    "name": "halconfig",
-    "mountPath": "/home/spinnaker/staging/.hal/config",
-    "subPath": "config"
-  },
-EOL
-}
-
-close_volume_mounts_patch_file() {
-  echo "]" >> $VOLUME_MOUNTS_JSON_PATCH_FILE
+bold() {
+  echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
 pushd $TEMP_DIR
 
-VOLUME_MOUNTS_JSON_PATCH_FILE=patch-file-volume-mounts.json
+mkdir -p .hal
 
-mkdir config-dir
-cp ~/.hal/config config-dir
-open_volume_mounts_patch_file
+# We want just these subdirs within ~/.hal to be copied into place on the Halyard Daemon pod.
+DIRS=(credentials profiles service-settings)
 
-DIRS=(profiles service-settings)
 for p in "${DIRS[@]}"; do
-  for f in $(find ~/.hal/*/$p -type f); do
-    flatten $f;
+  for f in $(find ~/.hal/*/$p -prune); do
+    SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
+    mkdir -p .hal/$SUB_PATH
+    cp -R ~/.hal/$SUB_PATH/* .hal/$SUB_PATH
   done
 done
 
-close_volume_mounts_patch_file
+cp ~/.hal/config .hal
 
-CONFIG_MAP_NAME=halconfig-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")
+grep kubeconfigFile .hal/config &> /dev/null
+FOUND_TOKEN=$?
+
+if [ "$FOUND_TOKEN" == "0" ]; then
+  bold "Rewriting kubeconfigFile path to reflect user 'spinnaker' on Halyard Daemon pod..."
+  sed -i "s/kubeconfigFile: \/home\/$USER/kubeconfigFile: \/home\/spinnaker/" .hal/config
+fi
+
 HALYARD_POD=spin-halyard-0
 
-# Create the new config map.
-kubectl create cm -n spinnaker $CONFIG_MAP_NAME --from-file $TEMP_DIR/config-dir
-
-# Remove old persistent config so staged config will be copied into place.
+# Remove old persistent config so new config can be copied into place.
+bold "Removing spinnaker/$HALYARD_POD:/home/spinnaker/.hal..."
 kubectl -n spinnaker exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 
-# Update the statefulset with the new volume mounts and config map.
-kubectl patch statefulset -n spinnaker spin-halyard --patch \
-  "[{'op': 'replace', 'path': '/spec/template/spec/containers/0/volumeMounts', \
-  'value':$(cat $TEMP_DIR/patch-file-volume-mounts.json)}, {'op': 'replace', \
-  'path': '/spec/template/spec/volumes/0', 'value':{'name':'halconfig',\
-  'configMap':{'name':'$CONFIG_MAP_NAME'}}}]" --type json
-
-statefulset_ready() {
-  printf "Waiting on $2 to restart"
-  while [[ "$(kubectl get statefulset $1 -n spinnaker -o \
-            jsonpath="{.status.readyReplicas}")" != \
-           "$(kubectl get statefulset $1 -n spinnaker -o \
-            jsonpath="{.status.replicas}")" || \
-           "$(kubectl get statefulset $1 -n spinnaker -o \
-            jsonpath="{.status.currentRevision}")" != \
-           "$(kubectl get statefulset $1 -n spinnaker -o \
-            jsonpath="{.status.updateRevision}")" ]]; do
-    printf "."
-    sleep 5
-  done
-  echo ""
-}
-
-statefulset_ready spin-halyard "Halyard"
+# Copy new config into place.
+bold "Copying $HOME/.hal into spinnaker/$HALYARD_POD:/home/spinnaker/.hal..."
+kubectl -n spinnaker cp $TEMP_DIR/.hal spin-halyard-0:/home/spinnaker
 
 popd
 rm -rf $TEMP_DIR
 
-# TODO: Add dry-run.
-# TODO: Add 'hal deploy apply' option.
+# TODO(duftler): Add dry-run.
+# TODO(duftler): Add 'hal deploy apply' option.
