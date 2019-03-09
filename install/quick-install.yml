@@ -333,9 +333,16 @@ data:
           enabled: false
           accounts: []
       pubsub:
+        enabled: true
         google:
-          enabled: false
-          subscriptions: []
+          enabled: true
+          pubsubType: GOOGLE
+          subscriptions:
+          - name: gcr-pub-sub
+            project: $PROJECT_ID
+            subscriptionName: $GCR_PUBSUB_SUBSCRIPTION
+            ackDeadlineSeconds: 10
+            messageFormat: GCR
       canary:
         enabled: true
         serviceIntegrations:

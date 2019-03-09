@@ -87,6 +87,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Creating GKE cluster $GKE_CLUSTER..."
 
   # TODO: Move some of these config settings to properties file.
+  # TODO: Should this be regional instead?
   gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
     --zone $ZONE --username "admin" --cluster-version "1.11.6" \
     --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
@@ -100,6 +101,40 @@ fi
 bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
 
 gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
+
+GCR_PUBSUB_TOPIC_NAME=projects/$PROJECT_ID/topics/gcr
+EXISTING_GCR_PUBSUB_TOPIC_NAME=$(gcloud pubsub topics list --project $PROJECT_ID \
+  --filter="name=$GCR_PUBSUB_TOPIC_NAME" --format="value(name)")
+
+if [ -z "$EXISTING_GCR_PUBSUB_TOPIC_NAME" ]; then
+  bold "Creating pubsub topic $GCR_PUBSUB_TOPIC_NAME for GCR..."
+  gcloud pubsub topics create --project $PROJECT_ID $GCR_PUBSUB_TOPIC_NAME
+else
+  bold "Using existing pubsub topic $EXISTING_GCR_PUBSUB_TOPIC_NAME for GCR..."
+fi
+
+EXISTING_GCR_PUBSUB_SUBSCRIPTION_NAME=$(gcloud pubsub subscriptions list \
+  --project $PROJECT_ID \
+  --filter="name=projects/$PROJECT_ID/subscriptions/$GCR_PUBSUB_SUBSCRIPTION" \
+  --format="value(name)")
+
+if [ -z "$EXISTING_GCR_PUBSUB_SUBSCRIPTION_NAME" ]; then
+  bold "Creating pubsub subscription $GCR_PUBSUB_SUBSCRIPTION for GCR..."
+  gcloud pubsub subscriptions create --project $PROJECT_ID $GCR_PUBSUB_SUBSCRIPTION \
+    --topic=gcr
+else
+  bold "Using existing pubsub subscription $GCR_PUBSUB_SUBSCRIPTION for GCR..."
+fi
+
+EXISTING_HAL_DEPLOY_APPLY_JOB_NAME=$(kubectl get job -n spinnaker \
+  --field-selector metadata.name=="hal-deploy-apply" \
+  -o json | jq -r .items[0].metadata.name)
+
+if [ $EXISTING_HAL_DEPLOY_APPLY_JOB_NAME != 'null' ]; then
+  bold "Deleting earlier job $EXISTING_HAL_DEPLOY_APPLY_JOB_NAME..."
+
+  kubectl delete job hal-deploy-apply -n spinnaker
+fi
 
 bold "Provisioning Spinnaker resources..."
 
@@ -118,6 +153,8 @@ job_ready() {
 job_ready hal-deploy-apply
 
 ../c2d/deploy_application.sh
+
+../manage/pull_config.sh
 
 EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
   --format="value(name)" --filter="entryPoint=spinnakerAuditLog")
