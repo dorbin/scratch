@@ -41,5 +41,12 @@ done
 
 cp .hal/config ~/.hal
 
+bold "Restoring Spinnaker deployment config files from Kubernetes secret spinnaker-deployment..."
+DEPLOYMENT_SECRET_DATA=$(kubectl get secret spinnaker-deployment -n spinnaker -o json)
+echo $DEPLOYMENT_SECRET_DATA | jq -r .data.properties | base64 -d > ~/scratch/install/properties
+echo $DEPLOYMENT_SECRET_DATA | jq -r '.data."config.json"' | base64 -d > ~/scratch/install/spinnakerAuditLog/config.json
+echo $DEPLOYMENT_SECRET_DATA | jq -r '.data."configure_iap_expanded.md"' | base64 -d > ~/scratch/install/expose/configure_iap_expanded.md
+echo $DEPLOYMENT_SECRET_DATA | jq -r '.data."openapi_expanded.yml"' | base64 -d > ~/scratch/install/expose/openapi_expanded.yml
+
 popd
 rm -rf $TEMP_DIR

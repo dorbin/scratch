@@ -34,10 +34,21 @@ if [ "$FOUND_TOKEN" == "0" ]; then
   sed -i "s/kubeconfigFile: \/home\/$USER/kubeconfigFile: \/home\/spinnaker/" .hal/config
 fi
 
-HALCONFIG_ARCHIVE_FILENAME=halconfig-$(date +%Y%m%d%H%M%S -u).tar.gz
+TIMESTAMP=$(date +%Y%m%d%H%M%S -u)
+HALCONFIG_ARCHIVE_FILENAME=halconfig-$TIMESTAMP.tar.gz
 bold "Backing up $HOME/.hal to $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME..."
 tar cfz $HALCONFIG_ARCHIVE_FILENAME .hal
 gsutil -q cp $HALCONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME
+
+DEPLOYMENT_CONFIG_ARCHIVE_FILENAME=deployment-config-$TIMESTAMP.tar.gz
+bold "Backing up Spinnaker deployment config files to $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME..."
+tar cfz $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME -C ~/scratch/install \
+  properties \
+  spinnakerAuditLog/config.json \
+  expose/configure_iap_expanded.md \
+  expose/openapi_expanded.yml
+  
+gsutil -q cp $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME
 
 # Remove old persistent config so new config can be copied into place.
 bold "Removing spinnaker/$HALYARD_POD:/home/spinnaker/.hal..."
@@ -50,5 +61,20 @@ kubectl -n spinnaker cp $TEMP_DIR/.hal spin-halyard-0:/home/spinnaker
 popd
 rm -rf $TEMP_DIR
 
-# TODO(duftler): Add dry-run.
+EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
+  --field-selector metadata.name=="spinnaker-deployment" \
+  -o json | jq .items[0].metadata.name)
+
+if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
+  bold "Deleting Kubernetes secret spinnaker-deployment..."
+  kubectl delete secret spinnaker-deployment -n spinnaker
+fi
+
+bold "Creating Kubernetes secret spinnaker-deployment containing Spinnaker deployment config files..."
+kubectl create secret generic spinnaker-deployment -n spinnaker \
+  --from-file ~/scratch/install/properties \
+  --from-file ~/scratch/install/spinnakerAuditLog/config.json \
+  --from-file ~/scratch/install/expose/configure_iap_expanded.md \
+  --from-file ~/scratch/install/expose/openapi_expanded.yml
+
 # TODO(duftler): Add 'hal deploy apply' option.
