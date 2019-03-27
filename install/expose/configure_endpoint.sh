@@ -4,7 +4,16 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ./properties
+source ~/scratch/install/properties
+
+DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
+
+if [ "$DOMAIN_NAME_LENGTH" -gt "63" ]; then
+  echo "Domain name $DOMAIN_NAME is greater than 63 characters. Please specify a \
+domain name not longer than 63 characters. The domain name is specified in the \
+$HOME/scratch/install/properties file."
+  exit 1
+fi
 
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
   --format="value(address)" --global --project $PROJECT_ID)
