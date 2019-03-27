@@ -15,14 +15,12 @@ spec:
     type: Spinnaker
     version: $SPINNAKER_VERSION
     description: |-
-      NGINX is open-source software for web serving, reverse proxying,
-      caching, load balancing, and media streaming.
+      Spinnaker is an open source, multi-cloud continuous
+      delivery platform for releasing software changes with
+      high velocity and confidence.
 
-      NGINX can also function as a proxy server for email (IMAP, POP3, and SMTP)
-      and a reverse proxy and load balancer for HTTP, TCP, and UDP servers.
-
-      If you would like to learn more about NGINX, please,
-      visit [NGINX website](https://www.nginx.com/).
+      If you would like to learn more about Spinnaker, please,
+      visit [Spinnaker website](https://spinnaker.io/).
 
       # Support
 
@@ -30,11 +28,15 @@ spec:
       container images you run or store in your own repositories
       up to date with security patches.
 
-      Community support for NGINX is available on
-      [Stack Overflow](http://stackoverflow.com/questions/tagged/nginx/).
+      Community support for Spinnaker is available on:
 
-      Please report issues with this NGINX container image via
-      the [GitHub Issue Tracker](https://github.com/GoogleCloudPlatform/nginx-docker/issues).
+      [Spinnaker Community Forum](https://community.spinnaker.io/)
+
+      [GitHub](https://github.com/spinnaker/spinnaker/issues)
+
+      [Slack](http://join.spinnaker.io/)
+
+      [Stack Overflow](http://stackoverflow.com/questions/tagged/spinnaker/)
     maintainers:
     - name: Google Click to Deploy
       url: https://cloud.google.com/solutions/#click-to-deploy
@@ -44,10 +46,10 @@ spec:
     - description: 'Spinnaker Documentation'
       url: https://spinnaker.io
     notes: |-
-      # Manage your Spinnaker installation
-      [Open Cloud Shell](https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_git_repo=https://github.com/duftler/scratch.git&cloudshell_tutorial=install/expose/configure_iap_expanded.md)
+      # Manage your Spinnaker
+      [Open Cloud Shell](https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_git_repo=https://github.com/duftler/scratch.git&cloudshell_tutorial=manage/landing_page.md)
 
-      # Connect to your Spinnaker installation
+      # Connect to your Spinnaker
       [https://$DOMAIN_NAME](https://$DOMAIN_NAME)
 
       # View the who, what, when and where of your Spinnaker installation
@@ -80,7 +82,7 @@ spec:
 #         name: nginx-1-nginx-secret
   selector:
     matchLabels:
-      app.kubernetes.io/name: "spinnaker-1"
+      app.kubernetes.io/name: $DEPLOYMENT_NAME
   componentKinds:
   - group: v1
     kind: ConfigMap
