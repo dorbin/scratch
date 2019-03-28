@@ -41,12 +41,27 @@ done
 
 cp .hal/config ~/.hal
 
-bold "Restoring Spinnaker deployment config files from Kubernetes secret spinnaker-deployment..."
-DEPLOYMENT_SECRET_DATA=$(kubectl get secret spinnaker-deployment -n spinnaker -o json)
-echo $DEPLOYMENT_SECRET_DATA | jq -r .data.properties | base64 -d > ~/scratch/install/properties
-echo $DEPLOYMENT_SECRET_DATA | jq -r '.data."config.json"' | base64 -d > ~/scratch/install/spinnakerAuditLog/config.json
-echo $DEPLOYMENT_SECRET_DATA | jq -r '.data."configure_iap_expanded.md"' | base64 -d > ~/scratch/install/expose/configure_iap_expanded.md
-echo $DEPLOYMENT_SECRET_DATA | jq -r '.data."openapi_expanded.yml"' | base64 -d > ~/scratch/install/expose/openapi_expanded.yml
+EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
+  --field-selector metadata.name=="spinnaker-deployment" \
+  -o json | jq .items[0].metadata.name)
+
+if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
+  bold "Restoring Spinnaker deployment config files from Kubernetes secret spinnaker-deployment..."
+  DEPLOYMENT_SECRET_DATA=$(kubectl get secret spinnaker-deployment -n spinnaker -o json)
+
+  extract_to_file_if_defined() {
+    DATA_ITEM_VALUE=$(echo $DEPLOYMENT_SECRET_DATA | jq -r ".data.\"$1\"")
+
+    if [ $DATA_ITEM_VALUE != 'null' ]; then
+      echo $DATA_ITEM_VALUE | base64 -d > $2
+    fi
+  }
+
+  extract_to_file_if_defined properties ~/scratch/install/properties
+  extract_to_file_if_defined config.json ~/scratch/install/spinnakerAuditLog/config.json
+  extract_to_file_if_defined configure_iap_expanded.md ~/scratch/install/expose/configure_iap_expanded.md
+  extract_to_file_if_defined openapi_expanded.yml ~/scratch/install/expose/openapi_expanded.yml
+fi
 
 popd
 rm -rf $TEMP_DIR

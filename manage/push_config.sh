@@ -40,13 +40,22 @@ bold "Backing up $HOME/.hal to $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME..
 tar cfz $HALCONFIG_ARCHIVE_FILENAME .hal
 gsutil -q cp $HALCONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME
 
+mkdir deployment_config_files
+
+copy_if_exists() {
+  if [ -e $1 ]; then
+    cp $1 $2
+  fi
+}
+
+copy_if_exists ~/scratch/install/properties deployment_config_files
+copy_if_exists ~/scratch/install/spinnakerAuditLog/config.json deployment_config_files
+copy_if_exists ~/scratch/install/expose/configure_iap_expanded.md deployment_config_files
+copy_if_exists ~/scratch/install/expose/openapi_expanded.yml deployment_config_files
+
 DEPLOYMENT_CONFIG_ARCHIVE_FILENAME=deployment-config-$TIMESTAMP.tar.gz
 bold "Backing up Spinnaker deployment config files to $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME..."
-tar cfz $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME -C ~/scratch/install \
-  properties \
-  spinnakerAuditLog/config.json \
-  expose/configure_iap_expanded.md \
-  expose/openapi_expanded.yml
+tar cfz $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME -C deployment_config_files $(ls deployment_config_files)
   
 gsutil -q cp $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME
 
@@ -57,9 +66,6 @@ kubectl -n spinnaker exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 # Copy new config into place.
 bold "Copying $HOME/.hal into spinnaker/$HALYARD_POD:/home/spinnaker/.hal..."
 kubectl -n spinnaker cp $TEMP_DIR/.hal spin-halyard-0:/home/spinnaker
-
-popd
-rm -rf $TEMP_DIR
 
 EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
   --field-selector metadata.name=="spinnaker-deployment" \
@@ -72,9 +78,9 @@ fi
 
 bold "Creating Kubernetes secret spinnaker-deployment containing Spinnaker deployment config files..."
 kubectl create secret generic spinnaker-deployment -n spinnaker \
-  --from-file ~/scratch/install/properties \
-  --from-file ~/scratch/install/spinnakerAuditLog/config.json \
-  --from-file ~/scratch/install/expose/configure_iap_expanded.md \
-  --from-file ~/scratch/install/expose/openapi_expanded.yml
+  --from-file deployment_config_files
+
+popd
+rm -rf $TEMP_DIR
 
 # TODO(duftler): Add 'hal deploy apply' option.

@@ -33,9 +33,12 @@ if [ -z "$SA_EMAIL" ]; then
     $SERVICE_ACCOUNT_NAME \
     --display-name $SERVICE_ACCOUNT_NAME
 
-  SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
-    --filter="displayName:$SERVICE_ACCOUNT_NAME" \
-    --format='value(email)')
+  while [ -z "$SA_EMAIL" ]; do
+    SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
+      --filter="displayName:$SERVICE_ACCOUNT_NAME" \
+      --format='value(email)')
+    sleep 5
+  done
 else
   bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
 fi
@@ -154,7 +157,16 @@ job_ready hal-deploy-apply
 
 ../c2d/deploy_application.sh
 
-../manage/pull_config.sh
+# Delete any existing deployment config secret.
+# It will be recreated with up-to-date contents during push_config.sh.
+EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
+  --field-selector metadata.name=="spinnaker-deployment" \
+  -o json | jq .items[0].metadata.name)
+
+if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
+  bold "Deleting Kubernetes secret spinnaker-deployment..."
+  kubectl delete secret spinnaker-deployment -n spinnaker
+fi
 
 EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
   --format="value(name)" --filter="entryPoint=spinnakerAuditLog")
@@ -168,6 +180,11 @@ if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
 else
   bold "Using existing audit log cloud function spinnakerAuditLog..."
 fi
+
+# We want the local hal config to match what was deployed.
+../manage/pull_config.sh
+# We want a full backup stored in the bucket and the full deployment config stored in a secret.
+../manage/push_config.sh
 
 deploy_ready() {
   printf "Waiting on $2 to come online"
