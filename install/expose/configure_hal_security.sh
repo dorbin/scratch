@@ -1,7 +1,4 @@
-#!/usr/bin/env bash
-
-hal config security api edit --override-base-url https://$DOMAIN_NAME/gate
-hal config security ui edit --override-base-url https://$DOMAIN_NAME
-hal config security authn iap edit --audience $AUD_CLAIM
-hal config security authn iap enable
-hal deploy apply
+~/hal/hal config security api edit --override-base-url https://$DOMAIN_NAME/gate
+~/hal/hal config security ui edit --override-base-url https://$DOMAIN_NAME
+~/hal/hal config security authn iap edit --audience $AUD_CLAIM
+~/hal/hal config security authn iap enable

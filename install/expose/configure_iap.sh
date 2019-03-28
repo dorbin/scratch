@@ -95,12 +95,11 @@ export AUD_CLAIM=/projects/$PROJECT_NUMBER/global/backendServices/$BACKEND_SERVI
 
 echo AUD_CLAIM=$AUD_CLAIM
 
-HALYARD_POD=spin-halyard-0
-
 bold "Configuring Spinnaker security settings..."
 
-kubectl exec $HALYARD_POD -n spinnaker -- bash -c \
-  "$(source ./properties && cat expose/configure_hal_security.sh | envsubst)"
+cat expose/configure_hal_security.sh | envsubst | bash
+~/scratch/manage/push_config.sh
+~/scratch/manage/apply_config.sh
 
 ../c2d/deploy_application.sh
 
