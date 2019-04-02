@@ -52,6 +52,7 @@ copy_if_exists ~/scratch/install/properties deployment_config_files
 copy_if_exists ~/scratch/install/spinnakerAuditLog/config.json deployment_config_files
 copy_if_exists ~/scratch/install/expose/configure_iap_expanded.md deployment_config_files
 copy_if_exists ~/scratch/install/expose/openapi_expanded.yml deployment_config_files
+copy_if_exists ~/scratch/manage/landing_page_expanded.md deployment_config_files
 
 DEPLOYMENT_CONFIG_ARCHIVE_FILENAME=deployment-config-$TIMESTAMP.tar.gz
 bold "Backing up Spinnaker deployment config files to $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME..."

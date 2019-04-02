@@ -61,6 +61,7 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   extract_to_file_if_defined config.json ~/scratch/install/spinnakerAuditLog/config.json
   extract_to_file_if_defined configure_iap_expanded.md ~/scratch/install/expose/configure_iap_expanded.md
   extract_to_file_if_defined openapi_expanded.yml ~/scratch/install/expose/openapi_expanded.yml
+  extract_to_file_if_defined landing_page_expanded.md ~/scratch/manage/landing_page_expanded.md
 fi
 
 popd
