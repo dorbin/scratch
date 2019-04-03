@@ -69,4 +69,4 @@ else
   bold "Using existing managed SSL certificate $EXISTING_MANAGED_CERT..."
 fi
 
-./expose/launch_configure_iap.sh
+~/scratch/install/expose/launch_configure_iap.sh
