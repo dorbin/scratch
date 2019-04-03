@@ -20,6 +20,6 @@ kubectl -n spinnaker port-forward $DECK_POD 8080:9000 > /dev/null 2>&1 &
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
   --format="value(address)" --global --project $PROJECT_ID)
 
-if [ -z "$IP_ADDR" ]; then
+if [ "$IP_ADDR" ]; then
   bold "Are you sure you aren't intending to connect via the domain name instead? Asking since you have a static ip configured..."
 fi
