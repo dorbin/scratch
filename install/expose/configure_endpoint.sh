@@ -4,7 +4,9 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/scratch/install/properties
+pushd ~/scratch/install
+
+source ./properties
 
 DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
 
@@ -69,4 +71,6 @@ else
   bold "Using existing managed SSL certificate $EXISTING_MANAGED_CERT..."
 fi
 
-~/scratch/install/expose/launch_configure_iap.sh
+./expose/launch_configure_iap.sh
+
+popd

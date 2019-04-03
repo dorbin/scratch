@@ -4,6 +4,8 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+pushd ~/scratch/install
+
 source ./properties
 
 EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
@@ -106,3 +108,5 @@ cat expose/configure_hal_security.sh | envsubst | bash
 # # What about CORS?
 
 # # Wait for services to come online again (steal logic from setup.sh):
+
+popd

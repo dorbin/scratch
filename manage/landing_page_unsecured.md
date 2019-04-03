@@ -1,7 +1,3 @@
-## Configure User Access (IAP)
-
-TODO...
-
 ## Use Spinnaker
 
 ### Forward Port to Deck
