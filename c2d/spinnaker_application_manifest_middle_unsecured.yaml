@@ -2,8 +2,16 @@
       # Manage your Spinnaker
       [Open Cloud Shell](https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_git_repo=https://github.com/duftler/scratch.git&cloudshell_tutorial=manage/landing_page_expanded.md)
 
+      Ensure you are connected to the correct GKE Cluster from within Cloud Shell:
+      ```
+      gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
+      ```
+
       # Connect to your Spinnaker
       Follow the link above to establish port forwarding via the Cloud Shell. Note that you can securely expose your Spinnaker via that link as well so it can be directly accessed in the future.
 
       # View the who, what, when and where of your Spinnaker installation
       [Spinnaker Audit Log](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=cloud_function%2Ffunction_name%2FspinnakerAuditLog&minLogLevel=200)
+
+      # Config Backups
+      Full backups are stored in [this bucket](https://console.developers.google.com/storage/browser/spin-gcs-bucket-k0ssaab9wdztnrvumslf-1554229083/backups/?project=rosco-oss-36).

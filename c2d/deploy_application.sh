@@ -11,12 +11,12 @@ export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
   --format="value(address)" --global --project $PROJECT_ID)
 
 if [ -z "$IP_ADDR" ]; then
-  bold "Generating Cloud Shell landing page for unsecured Spinnaker..."
+  bold "Updating Cloud Shell landing page for unsecured Spinnaker..."
   cat ~/scratch/manage/landing_page_base.md ~/scratch/manage/landing_page_unsecured.md \
     | envsubst > ~/scratch/manage/landing_page_expanded.md
   APP_MANIFEST_MIDDLE=spinnaker_application_manifest_middle_unsecured.yaml
 else
-  bold "Generating Cloud Shell landing page for secured Spinnaker..."
+  bold "Updating Cloud Shell landing page for secured Spinnaker..."
   cat ~/scratch/manage/landing_page_base.md ~/scratch/manage/landing_page_secured.md \
     | envsubst > ~/scratch/manage/landing_page_expanded.md
   APP_MANIFEST_MIDDLE=spinnaker_application_manifest_middle_secured.yaml
