@@ -7,17 +7,30 @@ fi
 if [ -f "properties" ]; then
   echo "The properties file already exists. Please move it out of the way if you want to generate a new properties file."
 else
+# Query existing Redis instances so we can avoid naming collisions.
+EXISTING_REDIS_NAMES=$(gcloud redis instances list --region us-west1 --project $PROJECT_ID \
+  --filter="name:spinnaker-" \
+  --format="value(name)")
+EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
+NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
+NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
+
+while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
+  NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
+done
+
   cat >properties <<EOL
 #!/usr/bin/env bash
 
 export PROJECT_ID=$PROJECT_ID
+export DEPLOYMENT_NAME=$NEW_DEPLOYMENT_NAME
+
 # If cluster does not exist, it will be created.
-export GKE_CLUSTER=spin-deployment
+export GKE_CLUSTER=\$DEPLOYMENT_NAME
 export REGION=us-west1
 export ZONE=us-west1-b
 
 export SPINNAKER_VERSION=1.12.2
-export DEPLOYMENT_NAME=spinnaker-1
 
 # See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 export TIMEZONE=$(cat /etc/timezone)
@@ -26,7 +39,7 @@ export TIMEZONE=$(cat /etc/timezone)
 export SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
 
 # If Cloud Memorystore Redis instance does not exist, it will be created.
-export REDIS_INSTANCE=spin-redis
+export REDIS_INSTANCE=\$DEPLOYMENT_NAME
 
 # If bucket does not exist, it will be created.
 export BUCKET_NAME="spin-gcs-bucket-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
