@@ -11,20 +11,24 @@ fi
 if [ -f "properties" ]; then
   echo "The properties file already exists. Please move it out of the way if you want to generate a new properties file."
 else
-  bold "Enabling Cloud Redis API. This could take several minutes..."
-  gcloud services --project $PROJECT_ID enable redis.googleapis.com
+  # Check if Redis api is enabled.
+  if [ $(gcloud services list --project $PROJECT_ID \
+           --filter="config.name:redis.googleapis.com" \
+           --format="value(config.name)") ]; then
+    # Query existing Redis instances so we can avoid naming collisions.
+    EXISTING_REDIS_NAMES=$(gcloud redis instances list --region us-west1 --project $PROJECT_ID \
+                             --filter="name:spinnaker-" \
+                             --format="value(name)")
+    EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
+    NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
+    NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
 
-  # Query existing Redis instances so we can avoid naming collisions.
-  EXISTING_REDIS_NAMES=$(gcloud redis instances list --region us-west1 --project $PROJECT_ID \
-    --filter="name:spinnaker-" \
-    --format="value(name)")
-  EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
-  NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
-  NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
-
-  while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
-    NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
-  done
+    while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
+      NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
+    done
+  else
+    NEW_DEPLOYMENT_NAME="spinnaker-1"
+  fi
 
   cat >properties <<EOL
 #!/usr/bin/env bash
