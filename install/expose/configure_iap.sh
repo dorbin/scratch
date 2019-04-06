@@ -39,6 +39,7 @@ EOL
     --from-literal=client_secret=$CLIENT_SECRET
 else
   bold "Using existing Kubernetes secret $SECRET_NAME..."
+  CLIENT_ID=$(kubectl get secret -n spinnaker $SECRET_NAME -o json | jq -r .data.client_id | base64 -d)
 fi
 
 envsubst < expose/backend-config.yml | kubectl apply -f -
@@ -67,18 +68,6 @@ bold $(envsubst < expose/deck-ingress.yml | kubectl apply -f -)
 
 export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
 
-gcurl() {
-  curl -s -H "Authorization:Bearer $(gcloud auth print-access-token)" \
-  -H "Content-Type: application/json" -H "Accept: application/json" \
-  -H "X-Goog-User-Project: $PROJECT_ID" $*
-}
-
-export IAP_IAM_POLICY_ETAG=$(gcurl -X POST -d "{}" \
-  https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web:getIamPolicy | jq .etag)
-
-cat expose/iap_policy.json | envsubst | gcurl -X POST -d @- \
-  https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web:setIamPolicy
-
 unset BACKEND_SERVICE_ID
 
 printf "Waiting for backend service to be provisioned.."
@@ -86,16 +75,24 @@ printf "Waiting for backend service to be provisioned.."
 while [ -z "$BACKEND_SERVICE_ID" ]; do
   printf "."
   export BACKEND_SERVICE_ID=$(gcloud compute backend-services list --project $PROJECT_ID \
-    --filter="description:spinnaker/spin-deck" --format="value(id)")
+    --filter="iap.oauth2ClientId:$CLIENT_ID AND description:spinnaker/spin-deck" --format="value(id)")
   sleep 30
 done
 echo ""
 
-echo BACKEND_SERVICE_ID=$BACKEND_SERVICE_ID
-
 export AUD_CLAIM=/projects/$PROJECT_NUMBER/global/backendServices/$BACKEND_SERVICE_ID
 
-echo AUD_CLAIM=$AUD_CLAIM
+gcurl() {
+  curl -s -H "Authorization:Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" -H "Accept: application/json" \
+  -H "X-Goog-User-Project: $PROJECT_ID" $*
+}
+
+export IAP_IAM_POLICY_ETAG=$(gcurl -X POST -d "{}" \
+  https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web/compute/services/$BACKEND_SERVICE_ID:getIamPolicy | jq .etag)
+
+cat expose/iap_policy.json | envsubst | gcurl -X POST -d @- \
+  https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web/compute/services/$BACKEND_SERVICE_ID:setIamPolicy
 
 bold "Configuring Spinnaker security settings..."
 

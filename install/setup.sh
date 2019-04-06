@@ -206,3 +206,6 @@ deploy_ready spin-deck "UI server"
 
 ../install_hal.sh
 ../install_spin.sh
+
+# We want a backup containing the newly-created ~/.spin/* files as well.
+../manage/push_config.sh

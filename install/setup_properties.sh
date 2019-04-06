@@ -47,7 +47,7 @@ export SPINNAKER_VERSION=1.12.2
 export TIMEZONE=$(cat /etc/timezone)
 
 # If service account does not exist, it will be created.
-export SERVICE_ACCOUNT_NAME="spin-acc-$(date +"%s")"
+export SERVICE_ACCOUNT_NAME="\$DEPLOYMENT_NAME-acc-$(date +"%s")"
 
 # If Cloud Memorystore Redis instance does not exist, it will be created.
 export REDIS_INSTANCE=\$DEPLOYMENT_NAME
