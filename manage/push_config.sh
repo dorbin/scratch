@@ -20,19 +20,22 @@ for p in "${DIRS[@]}"; do
   for f in $(find ~/.hal/*/$p -prune 2> /dev/null); do
     SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
     mkdir -p .hal/$SUB_PATH
-    cp -R ~/.hal/$SUB_PATH/* .hal/$SUB_PATH
+    cp -RT ~/.hal/$SUB_PATH .hal/$SUB_PATH
   done
 done
 
 cp ~/.hal/config .hal
 
-grep kubeconfigFile .hal/config &> /dev/null
-FOUND_TOKEN=$?
+REWRITABLE_KEYS=(kubeconfigFile jsonPath)
+for k in "${REWRITABLE_KEYS[@]}"; do
+  grep $k .hal/config &> /dev/null
+  FOUND_TOKEN=$?
 
-if [ "$FOUND_TOKEN" == "0" ]; then
-  bold "Rewriting kubeconfigFile path to reflect user 'spinnaker' on Halyard Daemon pod..."
-  sed -i "s/kubeconfigFile: \/home\/$USER/kubeconfigFile: \/home\/spinnaker/" .hal/config
-fi
+  if [ "$FOUND_TOKEN" == "0" ]; then
+    bold "Rewriting $k path to reflect user 'spinnaker' on Halyard Daemon pod..."
+    sed -i "s/$k: \/home\/$USER/$k: \/home\/spinnaker/" .hal/config
+  fi
+done
 
 TIMESTAMP=$(date +%Y%m%d%H%M%S -u)
 HALCONFIG_ARCHIVE_FILENAME=halconfig-$TIMESTAMP.tar.gz
