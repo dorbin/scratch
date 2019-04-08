@@ -13,6 +13,16 @@
 ~/scratch/manage/pull_config.sh
 ```
 
+### Reload this tutorial
+
+#### (This is a required step if you've just pulled config from a different Spinnaker.)
+
+This will include details on connecting to Spinnaker.
+
+```bash
+teachme ~/scratch/manage/landing_page_expanded.md
+```
+
 ### Configure Spinnaker via Halyard
 
 All [halyard](https://www.spinnaker.io/reference/halyard/commands/) commands are available.
