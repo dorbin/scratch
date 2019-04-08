@@ -155,6 +155,7 @@ job_ready() {
 
 job_ready hal-deploy-apply
 
+../manage/update_landing_page.sh
 ../c2d/deploy_application.sh
 
 # Delete any existing deployment config secret.

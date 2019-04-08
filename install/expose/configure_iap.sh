@@ -97,10 +97,10 @@ cat expose/iap_policy.json | envsubst | gcurl -X POST -d @- \
 bold "Configuring Spinnaker security settings..."
 
 cat expose/configure_hal_security.sh | envsubst | bash
+
+~/scratch/manage/update_landing_page.sh
 ~/scratch/manage/push_config.sh
 ~/scratch/manage/apply_config.sh
-
-../c2d/deploy_application.sh
 
 # # What about CORS?
 
