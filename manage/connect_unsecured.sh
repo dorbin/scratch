@@ -6,6 +6,8 @@ bold() {
 
 source ~/scratch/install/properties
 
+~/scratch/manage/check_project_mismatch.sh
+
 bold "Locating Deck pod..."
 
 DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \

@@ -6,6 +6,14 @@ bold() {
 
 source ~/scratch/install/properties
 
+CURRENT_CONTEXT_CLUSTER=$(kubectl config current-context | rev | cut -d '_' -f 1 | rev)
+
+if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
+  bold "Your Spinnaker config references cluster $GKE_CLUSTER, but you are connected to cluster $CURRENT_CONTEXT_CLUSTER."
+  bold "Use 'kubectl config use-context' to connect to the correct cluster before pushing the config."
+  exit 1
+fi
+
 HALYARD_POD=spin-halyard-0
 
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)

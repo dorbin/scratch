@@ -8,6 +8,8 @@ pushd ~/scratch/install
 
 source ./properties
 
+~/scratch/manage/check_project_mismatch.sh
+
 EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
   --field-selector metadata.name=="$SECRET_NAME" \
   -o json | jq .items[0].metadata.name)

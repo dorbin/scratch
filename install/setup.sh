@@ -10,6 +10,8 @@ err() {
 
 source ./properties
 
+~/scratch/manage/check_project_mismatch.sh
+
 REQUIRED_APIS="cloudfunctions.googleapis.com container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \

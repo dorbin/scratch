@@ -8,6 +8,8 @@ pushd ~/scratch/install
 
 source ./properties
 
+~/scratch/manage/check_project_mismatch.sh
+
 DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
 
 if [ "$DOMAIN_NAME_LENGTH" -gt "63" ]; then
