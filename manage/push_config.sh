@@ -75,24 +75,24 @@ tar cfz $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME -C deployment_config_files $(ls depl
 gsutil -q cp $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME
 
 # Remove old persistent config so new config can be copied into place.
-bold "Removing spinnaker/$HALYARD_POD:/home/spinnaker/.hal..."
-kubectl -n spinnaker exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
+bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
+kubectl -n halyard exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 
 # Copy new config into place.
-bold "Copying $HOME/.hal into spinnaker/$HALYARD_POD:/home/spinnaker/.hal..."
-kubectl -n spinnaker cp $TEMP_DIR/.hal spin-halyard-0:/home/spinnaker
+bold "Copying $HOME/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
+kubectl -n halyard cp $TEMP_DIR/.hal spin-halyard-0:/home/spinnaker
 
-EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
+EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n halyard \
   --field-selector metadata.name=="spinnaker-deployment" \
   -o json | jq .items[0].metadata.name)
 
 if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   bold "Deleting Kubernetes secret spinnaker-deployment..."
-  kubectl delete secret spinnaker-deployment -n spinnaker
+  kubectl delete secret spinnaker-deployment -n halyard
 fi
 
 bold "Creating Kubernetes secret spinnaker-deployment containing Spinnaker deployment config files..."
-kubectl create secret generic spinnaker-deployment -n spinnaker \
+kubectl create secret generic spinnaker-deployment -n halyard \
   --from-file deployment_config_files
 
 popd

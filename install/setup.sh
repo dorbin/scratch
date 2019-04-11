@@ -131,14 +131,14 @@ else
   bold "Using existing pubsub subscription $GCR_PUBSUB_SUBSCRIPTION for GCR..."
 fi
 
-EXISTING_HAL_DEPLOY_APPLY_JOB_NAME=$(kubectl get job -n spinnaker \
+EXISTING_HAL_DEPLOY_APPLY_JOB_NAME=$(kubectl get job -n halyard \
   --field-selector metadata.name=="hal-deploy-apply" \
   -o json | jq -r .items[0].metadata.name)
 
 if [ $EXISTING_HAL_DEPLOY_APPLY_JOB_NAME != 'null' ]; then
   bold "Deleting earlier job $EXISTING_HAL_DEPLOY_APPLY_JOB_NAME..."
 
-  kubectl delete job hal-deploy-apply -n spinnaker
+  kubectl delete job hal-deploy-apply -n halyard
 fi
 
 bold "Provisioning Spinnaker resources..."
@@ -147,7 +147,7 @@ envsubst < quick-install.yml | kubectl apply -f -
 
 job_ready() {
   printf "Waiting on job $1 to complete"
-  while [[ "$(kubectl get job $1 -n spinnaker -o \
+  while [[ "$(kubectl get job $1 -n halyard -o \
             jsonpath="{.status.succeeded}")" != "1" ]]; do
     printf "."
     sleep 5
@@ -162,13 +162,13 @@ job_ready hal-deploy-apply
 
 # Delete any existing deployment config secret.
 # It will be recreated with up-to-date contents during push_config.sh.
-EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
+EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n halyard \
   --field-selector metadata.name=="spinnaker-deployment" \
   -o json | jq .items[0].metadata.name)
 
 if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   bold "Deleting Kubernetes secret spinnaker-deployment..."
-  kubectl delete secret spinnaker-deployment -n spinnaker
+  kubectl delete secret spinnaker-deployment -n halyard
 fi
 
 EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \

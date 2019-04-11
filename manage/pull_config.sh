@@ -16,9 +16,9 @@ bold "Removing $HOME/.hal..."
 rm -rf ~/.hal
 
 # Copy persistent config into place.
-bold "Copying spinnaker/$HALYARD_POD:/home/spinnaker/.hal into $HOME/.hal..."
+bold "Copying halyard/$HALYARD_POD:/home/spinnaker/.hal into $HOME/.hal..."
 
-kubectl cp spinnaker/$HALYARD_POD:/home/spinnaker/.hal .hal
+kubectl cp halyard/$HALYARD_POD:/home/spinnaker/.hal .hal
 
 REWRITABLE_KEYS=(kubeconfigFile jsonPath)
 for k in "${REWRITABLE_KEYS[@]}"; do
@@ -44,13 +44,13 @@ done
 
 cp .hal/config ~/.hal
 
-EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n spinnaker \
+EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n halyard \
   --field-selector metadata.name=="spinnaker-deployment" \
   -o json | jq .items[0].metadata.name)
 
 if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   bold "Restoring Spinnaker deployment config files from Kubernetes secret spinnaker-deployment..."
-  DEPLOYMENT_SECRET_DATA=$(kubectl get secret spinnaker-deployment -n spinnaker -o json)
+  DEPLOYMENT_SECRET_DATA=$(kubectl get secret spinnaker-deployment -n halyard -o json)
 
   extract_to_file_if_defined() {
     DATA_ITEM_VALUE=$(echo $DEPLOYMENT_SECRET_DATA | jq -r ".data.\"$1\"")

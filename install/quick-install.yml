@@ -1,6 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: halyard
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
   name: spinnaker
 
 ---
@@ -16,6 +23,9 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
+  namespace: halyard
+- kind: ServiceAccount
+  name: default
   namespace: spinnaker
 
 ---
@@ -24,7 +34,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: halyard-pv-claim
-  namespace: spinnaker
+  namespace: halyard
   labels:
     app: halyard-storage-claim
 spec:
@@ -41,7 +51,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: spin-halyard
-  namespace: spinnaker
+  namespace: halyard
   labels:
     app: spin
     stack: halyard
@@ -128,7 +138,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: spin-halyard
-  namespace: spinnaker
+  namespace: halyard
 spec:
   ports:
     - port: 8064
@@ -144,7 +154,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: halconfig
-  namespace: spinnaker
+  namespace: halyard
 data:
   igor.yml: |
     enabled: false
@@ -383,7 +393,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: hal-deploy-apply
-  namespace: spinnaker
+  namespace: halyard
   labels:
     app: job
     stack: hal-deploy
@@ -403,4 +413,4 @@ spec:
         - /bin/sh
         args:
         - -c
-        - "hal deploy apply --daemon-endpoint http://spin-halyard.spinnaker:8064"
+        - "hal deploy apply --daemon-endpoint http://spin-halyard.halyard:8064"
