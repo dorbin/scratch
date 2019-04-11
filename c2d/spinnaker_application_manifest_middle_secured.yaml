@@ -14,4 +14,4 @@
       [Spinnaker Audit Log](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=cloud_function&logName=projects%2F$PROJECT_ID%2Flogs%2F$CLOUD_FUNCTION_NAME&minLogLevel=200)
 
       # Config Backups
-      Full backups are stored in [this bucket](https://console.developers.google.com/storage/browser/spin-gcs-bucket-k0ssaab9wdztnrvumslf-1554229083/backups/?project=rosco-oss-36).
+      Full backups are stored in [this bucket](https://console.developers.google.com/storage/browser/$BUCKET_NAME/backups/?project=$PROJECT_ID).
