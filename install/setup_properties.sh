@@ -60,6 +60,8 @@ export BUCKET_URI="gs://\$BUCKET_NAME"
 export AUDIT_LOG_UNAME="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 export AUDIT_LOG_PW="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 
+export CLOUD_FUNCTION_NAME="${DEPLOYMENT_NAME//-}AuditLog"
+
 export GCR_PUBSUB_SUBSCRIPTION=\$DEPLOYMENT_NAME-gcr-pubsub-subscription
 
 # The properties following this line are only relevant if you intend to expose your new Spinnaker instance.

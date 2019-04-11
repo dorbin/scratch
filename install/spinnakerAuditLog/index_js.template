@@ -13,7 +13,7 @@ const logging = new Logging({
  * @param {!Object} req Cloud Function request context.
  * @param {!Object} res Cloud Function response context.
  */
-exports.spinnakerAuditLog = function spinnakerAuditLog (req, res) {
+exports.$CLOUD_FUNCTION_NAME = function spinnakerAuditLog (req, res) {
   log('req.body.payload=' + JSON.stringify(req.body.payload), null, null, 'DEBUG');
 
   try {

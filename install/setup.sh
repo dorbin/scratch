@@ -172,16 +172,17 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
 fi
 
 EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
-  --format="value(name)" --filter="entryPoint=spinnakerAuditLog")
+  --format="value(name)" --filter="entryPoint=$CLOUD_FUNCTION_NAME")
 
 if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
-  bold "Deploying audit log cloud function spinnakerAuditLog..."
+  bold "Deploying audit log cloud function $CLOUD_FUNCTION_NAME..."
 
   cat spinnakerAuditLog/config_json.template | envsubst > spinnakerAuditLog/config.json
-  gcloud functions deploy spinnakerAuditLog --source spinnakerAuditLog \
+  cat spinnakerAuditLog/index_js.template | envsubst > spinnakerAuditLog/index.js
+  gcloud functions deploy $CLOUD_FUNCTION_NAME --source spinnakerAuditLog \
     --trigger-http --memory 2048MB --runtime nodejs6 --project $PROJECT_ID
 else
-  bold "Using existing audit log cloud function spinnakerAuditLog..."
+  bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
 
 # We want the local hal config to match what was deployed.

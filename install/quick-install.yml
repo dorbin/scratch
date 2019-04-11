@@ -160,7 +160,7 @@ data:
       endpoints:
         - wrap: true
           flatten: false
-          url: https://us-central1-$PROJECT_ID.cloudfunctions.net/spinnakerAuditLog
+          url: https://us-central1-$PROJECT_ID.cloudfunctions.net/$CLOUD_FUNCTION_NAME
           username: $AUDIT_LOG_UNAME
           password: $AUDIT_LOG_PW
           eventName: spinnaker_events
