@@ -21,7 +21,7 @@ fi
 
 
 curl -O https://raw.githubusercontent.com/spinnaker/halyard/master/install/debian/InstallHalyard.sh
-sudo bash InstallHalyard.sh -y $@
+sudo bash InstallHalyard.sh --user $(whoami) -y $@
 
 retVal=$?
 if [ $retVal == 13 ]; then
