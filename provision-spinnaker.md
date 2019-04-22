@@ -25,7 +25,7 @@ Verify (or modify) the configuration that will be used for your Spinnaker instal
 ### Begin the installation (this will take some time).
 
 ```bash
-./setup.sh
+~/scratch/install/setup.sh
 ```
 
 Once the setup script completes, continue to the next step.

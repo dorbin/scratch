@@ -8,7 +8,7 @@ err() {
   echo "$*" >&2;
 }
 
-source ./properties
+source ~/scratch/install/properties
 
 ~/scratch/manage/check_project_mismatch.sh
 
@@ -94,7 +94,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
   gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --username "admin" --cluster-version "1.11.6" \
+    --zone $ZONE --username "admin" --cluster-version "1.11.8" \
     --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
     --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
@@ -143,7 +143,7 @@ fi
 
 bold "Provisioning Spinnaker resources..."
 
-envsubst < quick-install.yml | kubectl apply -f -
+envsubst < ~/scratch/install/quick-install.yml | kubectl apply -f -
 
 job_ready() {
   printf "Waiting on job $1 to complete"
@@ -157,8 +157,8 @@ job_ready() {
 
 job_ready hal-deploy-apply
 
-../manage/update_landing_page.sh
-../c2d/deploy_application.sh
+~/scratch/manage/update_landing_page.sh
+~/scratch/c2d/deploy_application.sh
 
 # Delete any existing deployment config secret.
 # It will be recreated with up-to-date contents during push_config.sh.
@@ -177,18 +177,18 @@ EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
 if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   bold "Deploying audit log cloud function $CLOUD_FUNCTION_NAME..."
 
-  cat spinnakerAuditLog/config_json.template | envsubst > spinnakerAuditLog/config.json
-  cat spinnakerAuditLog/index_js.template | envsubst > spinnakerAuditLog/index.js
-  gcloud functions deploy $CLOUD_FUNCTION_NAME --source spinnakerAuditLog \
+  cat ~/scratch/install/spinnakerAuditLog/config_json.template | envsubst > ~/scratch/install/spinnakerAuditLog/config.json
+  cat ~/scratch/install/spinnakerAuditLog/index_js.template | envsubst > ~/scratch/install/spinnakerAuditLog/index.js
+  gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/scratch/install/spinnakerAuditLog \
     --trigger-http --memory 2048MB --runtime nodejs6 --project $PROJECT_ID
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
 
 # We want the local hal config to match what was deployed.
-../manage/pull_config.sh
+~/scratch/manage/pull_config.sh
 # We want a full backup stored in the bucket and the full deployment config stored in a secret.
-../manage/push_config.sh
+~/scratch/manage/push_config.sh
 
 deploy_ready() {
   printf "Waiting on $2 to come online"
@@ -208,8 +208,8 @@ deploy_ready spin-orca "orchestration engine"
 deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
 
-../install_hal.sh
-../install_spin.sh
+~/scratch/install_hal.sh
+~/scratch/install_spin.sh
 
 # We want a backup containing the newly-created ~/.spin/* files as well.
-../manage/push_config.sh
+~/scratch/manage/push_config.sh
