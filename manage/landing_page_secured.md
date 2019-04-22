@@ -1,6 +1,8 @@
 ## Configure User Access (IAP)
 
-TODO...
+TODO(duftler): Script this...
+
+Manually grant the `IAP-secured Web App User` role on the `spinnaker/spin-deck` resource to the user you'd like to grant access to [here](https://console.developers.google.com/security/iap?project={{project-id}}).
 
 ## Use Spinnaker
 
