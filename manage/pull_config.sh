@@ -69,6 +69,9 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   mkdir -p ~/.spin
   extract_to_file_if_defined config ~/.spin/config
   extract_to_file_if_defined key.json ~/.spin/key.json
+
+  bold "Rewriting key path in ~/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
+  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" ~/.spin/config
 fi
 
 popd
