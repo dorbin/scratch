@@ -9,7 +9,7 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 if [ -f "properties" ]; then
-  echo "The properties file already exists. Please move it out of the way if you want to generate a new properties file."
+  bold "The properties file already exists. Please move it out of the way if you want to generate a new properties file."
 else
   # Check if Redis api is enabled.
   if [ $(gcloud services list --project $PROJECT_ID \

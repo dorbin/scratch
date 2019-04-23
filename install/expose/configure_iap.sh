@@ -41,7 +41,6 @@ EOL
     --from-literal=client_secret=$CLIENT_SECRET
 else
   bold "Using existing Kubernetes secret $SECRET_NAME..."
-  CLIENT_ID=$(kubectl get secret -n spinnaker $SECRET_NAME -o json | jq -r .data.client_id | base64 -d)
 fi
 
 envsubst < expose/backend-config.yml | kubectl apply -f -
@@ -68,21 +67,7 @@ fi
 # Create ingress:
 bold $(envsubst < expose/deck-ingress.yml | kubectl apply -f -)
 
-export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
-
-unset BACKEND_SERVICE_ID
-
-printf "Waiting for backend service to be provisioned.."
-
-while [ -z "$BACKEND_SERVICE_ID" ]; do
-  printf "."
-  export BACKEND_SERVICE_ID=$(gcloud compute backend-services list --project $PROJECT_ID \
-    --filter="iap.oauth2ClientId:$CLIENT_ID AND description:spinnaker/spin-deck" --format="value(id)")
-  sleep 30
-done
-echo ""
-
-export AUD_CLAIM=/projects/$PROJECT_NUMBER/global/backendServices/$BACKEND_SERVICE_ID
+source expose/set_iap_properties.sh
 
 gcurl() {
   curl -s -H "Authorization:Bearer $(gcloud auth print-access-token)" \
@@ -97,6 +82,8 @@ cat expose/iap_policy.json | envsubst | gcurl -X POST -d @- \
   https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web/compute/services/$BACKEND_SERVICE_ID:setIamPolicy
 
 bold "Configuring Spinnaker security settings..."
+
+~/scratch/manage/pull_config.sh
 
 cat expose/configure_hal_security.sh | envsubst | bash
 
