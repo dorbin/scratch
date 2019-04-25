@@ -41,7 +41,7 @@ argument to the `hal config provider kubernetes account add/edit` commands), tha
 the '`~/.hal/default/credentials`' directory on your cloud shell vm. The `default` path segment should
 be changed if you are using a different name for your deployment.
 
-Same requirement for any Google json key file specified via the `--json-path` argument various commands.
+Same requirement for any Google json key file specified via the `--json-path` argument to various commands.
 
 ### Push updated config to Spinnaker deployment
 
