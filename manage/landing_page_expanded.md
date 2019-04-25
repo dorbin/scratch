@@ -23,6 +23,8 @@ You can skip this step if you are the original installer/operator, as they will 
 
 ### Reload this tutorial
 
+#### (This is a required step if you've just pulled config from a different Spinnaker.)
+
 This will include details on connecting to Spinnaker.
 
 ```bash
