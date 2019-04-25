@@ -71,8 +71,8 @@ source expose/set_iap_properties.sh
 
 gcurl() {
   curl -s -H "Authorization:Bearer $(gcloud auth print-access-token)" \
-  -H "Content-Type: application/json" -H "Accept: application/json" \
-  -H "X-Goog-User-Project: $PROJECT_ID" $*
+    -H "Content-Type: application/json" -H "Accept: application/json" \
+    -H "X-Goog-User-Project: $PROJECT_ID" $*
 }
 
 export IAP_IAM_POLICY_ETAG=$(gcurl -X POST -d "{}" \

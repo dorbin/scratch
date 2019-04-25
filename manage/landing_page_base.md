@@ -54,3 +54,12 @@ Same requirement for any Google json key file specified via the `--json-path` ar
 ```bash
 ~/scratch/manage/apply_config.sh
 ```
+
+## Configure Operator Access
+
+To add additional operators, grant them the `Owner` role on GCP Project {{project-id}}: [IAM Permissions](https://console.developers.google.com/iam-admin/iam?project={{project-id}})
+
+Once they have been added to the project, they can locate Spinnaker by navigating to the newly-registered [Kubernetes Application](https://console.developers.google.com/kubernetes/application/$ZONE/$DEPLOYMENT_NAME/spinnaker/$DEPLOYMENT_NAME?project={{project-id}}).
+
+The application's *Next Steps* section contains the relevant links and operator instructions.
+

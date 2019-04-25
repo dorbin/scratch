@@ -6,19 +6,17 @@ fi
 
 export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
 
-unset BACKEND_SERVICE_ID
+bold "Querying for backend service id..."
 
-printf "Waiting for backend service to be provisioned.."
+export BACKEND_SERVICE_ID=$(gcloud compute backend-services list --project $PROJECT_ID \
+  --filter="iap.oauth2ClientId:$CLIENT_ID AND description:spinnaker/spin-deck" --format="value(id)")
 
 while [ -z "$BACKEND_SERVICE_ID" ]; do
-  printf "."
+  bold "Waiting for backend service to be provisioned..."
+  sleep 30
+
   export BACKEND_SERVICE_ID=$(gcloud compute backend-services list --project $PROJECT_ID \
     --filter="iap.oauth2ClientId:$CLIENT_ID AND description:spinnaker/spin-deck" --format="value(id)")
-
-  if [ -z "$BACKEND_SERVICE_ID" ]; then
-    sleep 30
-  fi
 done
-echo ""
 
 export AUD_CLAIM=/projects/$PROJECT_NUMBER/global/backendServices/$BACKEND_SERVICE_ID
