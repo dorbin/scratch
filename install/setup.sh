@@ -45,13 +45,21 @@ else
   bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
 fi
 
-# TODO: What exact roles/permissions are required?
 bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
 
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member serviceAccount:$SA_EMAIL \
-  --role roles/owner \
-  --format=none
+K8S_REQUIRED_ROLES=(container.admin monitoring.admin pubsub.admin storage.admin)
+EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$SA_EMAIL $PROJECT_ID \
+  --flatten bindings[].members --format="value(bindings.role)")
+
+for r in "${K8S_REQUIRED_ROLES[@]}"; do
+  if [ -z "$(echo $EXISTING_ROLES | grep $r)" ]; then
+    bold "Assigning role $r..."
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+      --member serviceAccount:$SA_EMAIL \
+      --role roles/$r \
+      --format=none
+  fi
+done
 
 export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
   --project $PROJECT_ID --region $REGION \
