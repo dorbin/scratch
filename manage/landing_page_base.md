@@ -34,8 +34,6 @@ hal config
 
 ### Notes on Halyard commands that reference local files
 
-(TODO: Add notes...)
-
 If you add a kubernetes account that references a kubeconfig file (specified via the `--kubeconfig-file`
 argument to the `hal config provider kubernetes account add/edit` commands), that file must live within
 the '`~/.hal/default/credentials`' directory on your cloud shell vm. The `default` path segment should
@@ -53,6 +51,14 @@ Same requirement for any Google json key file specified via the `--json-path` ar
 
 ```bash
 ~/scratch/manage/apply_config.sh
+```
+
+## Scripts for Common Commands
+
+### Add Spinnaker account for GCE
+
+```bash
+~/scratch/manage/add_gce_account.sh
 ```
 
 ## Configure Operator Access
