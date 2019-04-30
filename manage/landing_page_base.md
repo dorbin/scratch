@@ -59,6 +59,8 @@ Same requirement for any Google json key file specified via the `--json-path` ar
 
 Prior to running this command, you must ensure that you have configured the context you intend to use to manage your GKE resources.
 
+The public Spinnaker documentation contains details on [configuring GKE clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
+
 ```bash
 ~/scratch/manage/add_gke_account.sh
 ```

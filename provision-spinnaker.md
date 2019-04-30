@@ -58,3 +58,11 @@ expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.go
 ```bash
 ~/scratch/install/expose/configure_endpoint.sh
 ```
+
+### Manage & Share Spinnaker
+
+Now that Spinnaker has been provisioned, next steps can be found via this landing page:
+
+```bash
+teachme ~/scratch/manage/landing_page_expanded.md
+```
