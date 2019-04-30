@@ -55,6 +55,14 @@ Same requirement for any Google json key file specified via the `--json-path` ar
 
 ## Scripts for Common Commands
 
+### Add Spinnaker account for GKE
+
+Prior to running this command, you must ensure that you have configured the context you intend to use to manage your GKE resources.
+
+```bash
+~/scratch/manage/add_gke_account.sh
+```
+
 ### Add Spinnaker account for GCE
 
 ```bash

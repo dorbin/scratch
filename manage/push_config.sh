@@ -6,6 +6,8 @@ bold() {
 
 source ~/scratch/install/properties
 
+# TODO(duftler): Add check to ensure that we are not overriding with older or empty config.
+
 CURRENT_CONTEXT_CLUSTER=$(kubectl config current-context | rev | cut -d '_' -f 1 | rev)
 
 if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
