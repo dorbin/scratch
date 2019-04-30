@@ -71,6 +71,12 @@ The public Spinnaker documentation contains details on [configuring GKE clusters
 ~/scratch/manage/add_gce_account.sh
 ```
 
+### Connect to Redis
+
+```bash
+~/scratch/manage/connect_to_redis.sh
+```
+
 ## Configure Operator Access
 
 To add additional operators, grant them the `Owner` role on GCP Project {{project-id}}: [IAM Permissions](https://console.developers.google.com/iam-admin/iam?project={{project-id}})
