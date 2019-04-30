@@ -41,7 +41,7 @@ export GKE_CLUSTER=\$DEPLOYMENT_NAME
 export REGION=us-west1
 export ZONE=us-west1-b
 
-export SPINNAKER_VERSION=1.12.2
+export SPINNAKER_VERSION=1.13.6
 
 # See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 export TIMEZONE=$(cat /etc/timezone)
