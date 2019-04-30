@@ -7,7 +7,7 @@ bold() {
 source ~/scratch/install/properties
 
 read -e -p "Please enter the id of the project within which you wish to manage GCE resources: " -i $PROJECT_ID MANAGED_PROJECT_ID
-read -e -p "Please enter a name for the new Spinnaker account: " -i $MANAGED_PROJECT_ID GCE_ACCOUNT_NAME
+read -e -p "Please enter a name for the new Spinnaker account: " -i "$MANAGED_PROJECT_ID-acct" GCE_ACCOUNT_NAME
 
 bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
 
