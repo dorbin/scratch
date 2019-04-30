@@ -47,7 +47,7 @@ fi
 
 bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
 
-K8S_REQUIRED_ROLES=(container.admin monitoring.admin pubsub.admin storage.admin)
+K8S_REQUIRED_ROLES=(container.admin logging.logWriter monitoring.admin pubsub.admin storage.admin)
 EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$SA_EMAIL $PROJECT_ID \
   --flatten bindings[].members --format="value(bindings.role)")
 
