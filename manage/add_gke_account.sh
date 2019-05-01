@@ -53,6 +53,9 @@ done
 
 mkdir -p ~/.hal/default/credentials
 KUBECONFIG_FILENAME="kubeconfig-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 9 | head -n 1)"
+
+bold "Copying ~/.kube/config into ~/.hal/default/credentials/$KUBECONFIG_FILENAME so it can be pushed to your halyard daemon's pod..."
+
 cp ~/.kube/config ~/.hal/default/credentials/$KUBECONFIG_FILENAME
 
 ~/hal/hal config provider kubernetes account add $GKE_ACCOUNT_NAME \
