@@ -34,12 +34,12 @@ else
 #!/usr/bin/env bash
 
 export PROJECT_ID=$PROJECT_ID
-export DEPLOYMENT_NAME=$NEW_DEPLOYMENT_NAME
+export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
 # If cluster does not exist, it will be created.
-export GKE_CLUSTER=\$DEPLOYMENT_NAME
-export REGION=us-west1
-export ZONE=us-west1-b
+export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
+export ZONE=${ZONE:-us-west1-b}
+export REGION=\$(echo \$ZONE | cut -d - -f 1,2)
 
 export SPINNAKER_VERSION=1.13.6
 
