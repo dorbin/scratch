@@ -188,7 +188,7 @@ if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   cat ~/scratch/install/spinnakerAuditLog/config_json.template | envsubst > ~/scratch/install/spinnakerAuditLog/config.json
   cat ~/scratch/install/spinnakerAuditLog/index_js.template | envsubst > ~/scratch/install/spinnakerAuditLog/index.js
   gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/scratch/install/spinnakerAuditLog \
-    --trigger-http --memory 2048MB --runtime nodejs6 --project $PROJECT_ID
+    --trigger-http --memory 2048MB --runtime nodejs8 --project $PROJECT_ID
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi

@@ -3,6 +3,7 @@
 # PROJECT_ID should be set, but we will try to determine via gcloud config if not set.
 # DEPLOYMENT_NAME, GKE_CLUSTER and ZONE are optional.
 # If GKE_CLUSTER is set, ZONE is required. (This indicates that we should install in an existing cluster.)
+# If using a pre-existing cluster, that cluster must have IP aliases enabled (since we are using a hosted Redis instance).
 # ZONE can be set and GKE_CLUSTER left unset. (This indicates we should create a new cluster in $ZONE.)
 
 bold() {
@@ -18,29 +19,9 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-if [ -f "properties" ]; then
+if [ -f "$HOME/scratch/install/properties" ]; then
   bold "The properties file already exists. Please move it out of the way if you want to generate a new properties file."
 else
-  # Check if Redis api is enabled.
-  if [ $(gcloud services list --project $PROJECT_ID \
-           --filter="config.name:redis.googleapis.com" \
-           --format="value(config.name)") ]; then
-    # Query existing Redis instances so we can avoid naming collisions.
-    # TODO: Be smarter about the choice of region here.
-    EXISTING_REDIS_NAMES=$(gcloud redis instances list --region us-west1 --project $PROJECT_ID \
-                             --filter="name:spinnaker-" \
-                             --format="value(name)")
-    EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
-    NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
-    NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
-
-    while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
-      NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
-    done
-  else
-    NEW_DEPLOYMENT_NAME="spinnaker-1"
-  fi
-
   if [ "$GKE_CLUSTER" ]; then
     if [ -z "$ZONE" ]; then
       echo "If GKE_CLUSTER is specified, ZONE must also be specified."
@@ -63,7 +44,31 @@ else
     fi
   fi
 
-  cat >properties <<EOL
+  ZONE=${ZONE:-us-west1-b}
+  REGION=$(echo $ZONE | cut -d - -f 1,2)
+
+  # Check if Redis api is enabled.
+  if [ $(gcloud services list --project $PROJECT_ID \
+           --filter="config.name:redis.googleapis.com" \
+           --format="value(config.name)") ]; then
+    # Query existing Redis instances so we can avoid naming collisions.
+    # TODO: Should really query redis instances across _all_ regions to ensure no deployment naming collision.
+    # TODO: Alternatively, could incorporate region in generated deployment name.
+    EXISTING_REDIS_NAMES=$(gcloud redis instances list --region $REGION --project $PROJECT_ID \
+                             --filter="name:spinnaker-" \
+                             --format="value(name)")
+    EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
+    NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
+    NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
+
+    while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
+      NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
+    done
+  else
+    NEW_DEPLOYMENT_NAME="spinnaker-1"
+  fi
+
+  cat > ~/scratch/install/properties <<EOL
 #!/usr/bin/env bash
 
 export PROJECT_ID=$PROJECT_ID
@@ -71,8 +76,8 @@ export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
-export ZONE=${ZONE:-us-west1-b}
-export REGION=\$(echo \$ZONE | cut -d - -f 1,2)
+export ZONE=$ZONE
+export REGION=$REGION
 
 export SPINNAKER_VERSION=1.13.6
 
