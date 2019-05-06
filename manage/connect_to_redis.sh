@@ -26,6 +26,10 @@ if [ -z $REDIS_CLI_DEPLOYMENT ]; then
   kubectl run redisbox --image=gcr.io/google_containers/redis:v1 -n spinnaker
 fi
 
+bold "Waiting for redis-cli deployment to become available..."
+
+kubectl wait --for condition=available deployment redisbox -n spinnaker
+
 bold "Locating redis-cli pod..."
 
 REDIS_CLI_POD=$(kubectl get pods -n spinnaker -l run=redisbox \
