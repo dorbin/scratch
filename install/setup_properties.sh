@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 
+# PROJECT_ID should be set, but we will try to determine via gcloud config if not set.
+# DEPLOYMENT_NAME, GKE_CLUSTER and ZONE are optional.
+# If GKE_CLUSTER is set, ZONE is required. (This indicates that we should install in an existing cluster.)
+# ZONE can be set and GKE_CLUSTER left unset. (This indicates we should create a new cluster in $ZONE.)
+
 bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
 if [ -z "$PROJECT_ID" ]; then
   PROJECT_ID=$(gcloud info --format='value(config.project)')
+fi
+
+if [ -z "$PROJECT_ID" ]; then
+  echo "PROJECT_ID must be specified."
+  exit 1
 fi
 
 if [ -f "properties" ]; then
@@ -16,6 +26,7 @@ else
            --filter="config.name:redis.googleapis.com" \
            --format="value(config.name)") ]; then
     # Query existing Redis instances so we can avoid naming collisions.
+    # TODO: Be smarter about the choice of region here.
     EXISTING_REDIS_NAMES=$(gcloud redis instances list --region us-west1 --project $PROJECT_ID \
                              --filter="name:spinnaker-" \
                              --format="value(name)")
@@ -28,6 +39,28 @@ else
     done
   else
     NEW_DEPLOYMENT_NAME="spinnaker-1"
+  fi
+
+  if [ "$GKE_CLUSTER" ]; then
+    if [ -z "$ZONE" ]; then
+      echo "If GKE_CLUSTER is specified, ZONE must also be specified."
+      exit 1
+    fi
+
+    # Since cluster already exists, must resolve service account from the cluster.
+    EXISTING_SA_EMAIL=$(gcloud beta container clusters describe --project $PROJECT_ID \
+                          --zone $ZONE $GKE_CLUSTER --format="value(nodeConfig.serviceAccount)")
+
+    if [ -z $EXISTING_SA_EMAIL ]; then
+      echo "Unable to resolve service account from existing cluster $GKE_CLUSTER in zone $ZONE."
+      exit 1
+    fi
+
+    if [ "$EXISTING_SA_EMAIL" == "default" ]; then
+      SERVICE_ACCOUNT_NAME="Compute Engine default service account"
+    else
+      SERVICE_ACCOUNT_NAME=$(echo $EXISTING_SA_EMAIL | cut -d @ -f 1)
+    fi
   fi
 
   cat >properties <<EOL
@@ -47,7 +80,7 @@ export SPINNAKER_VERSION=1.13.6
 export TIMEZONE=$(cat /etc/timezone)
 
 # If service account does not exist, it will be created.
-export SERVICE_ACCOUNT_NAME="\$DEPLOYMENT_NAME-acc-$(date +"%s")"
+export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-"\$DEPLOYMENT_NAME-acc-$(date +"%s")"}"
 
 # If Cloud Memorystore Redis instance does not exist, it will be created.
 export REDIS_INSTANCE=\$DEPLOYMENT_NAME
