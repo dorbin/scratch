@@ -3,7 +3,9 @@
 # PROJECT_ID should be set, but we will try to determine via gcloud config if not set.
 # DEPLOYMENT_NAME, GKE_CLUSTER and ZONE are optional.
 # If GKE_CLUSTER is set, ZONE is required. (This indicates that we should install in an existing cluster.)
-# If using a pre-existing cluster, that cluster must have IP aliases enabled (since we are using a hosted Redis instance).
+# If using a pre-existing cluster, that cluster must have:
+#   - IP aliases enabled (since we are using a hosted Redis instance)
+#   - Full Cloud Platform scope for its nodes (if using the default service account)
 # ZONE can be set and GKE_CLUSTER left unset. (This indicates we should create a new cluster in $ZONE.)
 
 bold() {
