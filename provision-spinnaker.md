@@ -38,6 +38,9 @@ Once the setup script completes, continue to the next step.
 ~/scratch/manage/connect_unsecured.sh
 ```
 
+Do not use the `hal deploy connect` command, as this will result in two ports, 8084 and 9000, being forwarded from your shell. Cloud Shell can only expose one port for preview,
+so you'll need to use the connect_unsecured.sh command instead.
+
 ### Connect to Deck
 
 <walkthrough-spotlight-pointer
