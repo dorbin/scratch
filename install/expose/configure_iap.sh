@@ -83,8 +83,6 @@ cat expose/iap_policy.json | envsubst | gcurl -X POST -d @- \
 
 bold "Configuring Spinnaker security settings..."
 
-~/scratch/manage/pull_config.sh
-
 cat expose/configure_hal_security.sh | envsubst | bash
 
 ~/scratch/manage/update_landing_page.sh
