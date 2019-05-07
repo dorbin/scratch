@@ -73,6 +73,15 @@ else
   cat > ~/scratch/install/properties <<EOL
 #!/usr/bin/env bash
 
+# This file is generated just once per Spinnaker installation, prior to running setup.sh.
+# You can make changes to this file before running setup.sh for the first time.
+# If setup.sh is interrupted, you can run it again at any point and it will finish any incomplete steps.
+# Do not change this file once you have run setup.sh for the first time.
+# If you want to provision a new Spinnaker installation, whether in the same project or a different project,
+#   simply wait until setup.sh completes and delete this file (or the entire cloned repo) from your
+#   Cloud Shell home directory. Then you can relaunch the provision-spinnaker.md tutorial and generate a new
+#   properties file for use in provisioning a new Spinnaker installation.
+
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
