@@ -26,7 +26,6 @@ teachme ~/scratch/manage/landing_page_expanded.md
 ### Configure Spinnaker via Halyard
 
 All [halyard](https://www.spinnaker.io/reference/halyard/commands/) commands are available.
-(TODO: Link to common commands.)
 
 ```bash
 hal config
@@ -54,6 +53,15 @@ Same requirement for any Google json key file specified via the `--json-path` ar
 ```
 
 ## Scripts for Common Commands
+
+### Halyard CLI
+
+The Halyard CLI (`hal`) and daemon are installed in your Cloud Shell. If you want to use a specific version of Halyard, you must use
+`~/scratch/install_hal.sh`. If you want to upgrade to the latest version of Halyard, you must use `~/scratch/update_hal.sh`.
+
+### Spinnaker CLI
+
+The Spinnaker CLI (`spin`) is installed in your Cloud Shell. If you want to upgrade to the latest version, you must use `~/scratch/install_spin.sh`.
 
 ### Add Spinnaker account for GKE
 
