@@ -73,6 +73,6 @@ teachme ~/scratch/manage/landing_page_expanded.md
 ### Ongoing Management
 
 When you want to manage Spinnaker in the future, you can always locate your Spinnaker installation
-by navigating to the newly-registered [Kubernetes Application](https://console.developers.google.com/kubernetes/application/us-west1-b/spinnaker-1/spinnaker/spinnaker-1?project={{project-id}}).
+by navigating to the newly-registered Kubernetes Application via the [Applications](https://console.developers.google.com/kubernetes/application?project={{project-id}}) view.
 
 The application's *Next Steps* section contains the relevant links and operator instructions.
