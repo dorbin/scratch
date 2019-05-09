@@ -20,6 +20,7 @@ NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
 
 if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   bold "Enabling required APIs ($REQUIRED_APIS)..."
+  bold "This will take a few minutes (progress will not be reported during this operation)..."
 
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
 fi
