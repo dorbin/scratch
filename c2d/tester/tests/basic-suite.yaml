@@ -12,6 +12,6 @@ actions:
     script: curl -k "http://{{ .Env.GATE_ADDR }}:8084/credentials" | jq [.[].name]
     expect:
       stdout:
-        contains: '"my-kubernetes-account"'
+        contains: '"spinnaker-install-account"'
       exitCode:
         equals: 0

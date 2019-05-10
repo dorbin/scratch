@@ -228,7 +228,7 @@ data:
         kubernetes:
           enabled: true
           accounts:
-          - name: my-kubernetes-account
+          - name: spinnaker-install-account
             requiredGroupMembership: []
             providerVersion: V2
             dockerRegistries: []
@@ -241,14 +241,14 @@ data:
             customResources: []
             oauthScopes: []
             oAuthScopes: []
-          primaryAccount: my-kubernetes-account
+          primaryAccount: spinnaker-install-account
         oraclebmcs:
           enabled: false
           accounts: []
       deploymentEnvironment:
         size: SMALL
         type: Distributed
-        accountName: my-kubernetes-account
+        accountName: spinnaker-install-account
         updateVersions: true
         consul:
           enabled: false
