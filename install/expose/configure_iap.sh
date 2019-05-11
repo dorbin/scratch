@@ -17,10 +17,8 @@ EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
 if [ $EXISTING_SECRET_NAME == 'null' ]; then
   bold "Creating Kubernetes secret $SECRET_NAME..."
 
-  read -sp 'Enter your OAuth credentials Client ID: ' CLIENT_ID
-  echo
-  read -sp 'Enter your OAuth credentials Client secret: ' CLIENT_SECRET
-  echo
+  read -p 'Enter your OAuth credentials Client ID: ' CLIENT_ID
+  read -p 'Enter your OAuth credentials Client secret: ' CLIENT_SECRET
 
   cat >~/.spin/config <<EOL
 gate:
