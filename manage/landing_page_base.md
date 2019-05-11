@@ -43,7 +43,7 @@ If you add a Kubernetes account that references a kubeconfig file (specified via
 argument to the `hal config provider kubernetes account add/edit` commands), that file must live within
 the '`~/.hal/default/credentials`' directory on your Cloud Shell VM (you'll need to create that directory
 if it does not already exist). The `default` path segment should be changed if you are using a different
-name for your deployment.
+name for your [halyard deployment](https://www.spinnaker.io/reference/halyard/#deployments).
 
 Same requirement for any Google json key file specified via the `--json-path` argument to various commands.
 
