@@ -7,20 +7,26 @@
 
 ## Manage Spinnaker via Halyard from Cloud Shell
 
+### Ensure you are connected to the correct Kubernetes context
+
+```bash
+PROJECT_ID={{project-id}} ~/scratch/manage/check_cluster_config.sh
+```
+
 ### Pull all config from Spinnaker deployment into cloud shell
 
 ```bash
 ~/scratch/manage/pull_config.sh
 ```
 
-### Reload this tutorial
+### Update the console
 
-#### (This is a required step if you've just pulled config from a different Spinnaker.)
+#### (This is a required step if you've just pulled config from a different Spinnaker deployment.)
 
 This will include details on connecting to Spinnaker.
 
 ```bash
-teachme ~/scratch/manage/landing_page_expanded.md
+~/scratch/manage/update_console.sh
 ```
 
 ### Configure Spinnaker via Halyard

@@ -67,7 +67,7 @@ expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.go
 Now that Spinnaker has been provisioned, next steps can be found via this landing page:
 
 ```bash
-teachme ~/scratch/manage/landing_page_expanded.md
+~/scratch/manage/update_console.sh
 ```
 
 ### Ongoing Management

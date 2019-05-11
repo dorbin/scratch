@@ -4,6 +4,13 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+CURRENT_CONTEXT=$(kubectl config current-context)
+
+if [ "$?" != "0" ]; then
+  bold "No current Kubernetes context is configured."
+  exit 1
+fi
+
 HALYARD_POD=spin-halyard-0
 
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
