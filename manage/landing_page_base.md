@@ -1,11 +1,18 @@
 # Manage Spinnaker
 
-## GCP Project Selection
+Use this section to manage your Spinnaker deployment going forward.
+
+## Select GCP project
+
+Select the project in which your Spinnaker is installed, then click **Confirm
+project**.
 
 <walkthrough-project-billing-setup>
 </walkthrough-project-billing-setup>
 
 ## Manage Spinnaker via Halyard from Cloud Shell
+
+This section guides you as you manage your Spinnaker deployment.
 
 ### Ensure you are connected to the correct Kubernetes context
 
@@ -13,7 +20,11 @@
 PROJECT_ID={{project-id}} ~/scratch/manage/check_cluster_config.sh
 ```
 
-### Pull all config from Spinnaker deployment into cloud shell
+### Pull Spinnaker config
+
+Paste and run this command to pull the configuration from your Spinnaker
+deployment into your Cloud Shell.
+
 
 ```bash
 ~/scratch/manage/pull_config.sh
@@ -21,9 +32,9 @@ PROJECT_ID={{project-id}} ~/scratch/manage/check_cluster_config.sh
 
 ### Update the console
 
-#### (This is a required step if you've just pulled config from a different Spinnaker deployment.)
+**This is a required step if you've just pulled config from a different Spinnaker deployment.**
 
-This will include details on connecting to Spinnaker.
+This will include details on how to connect to Spinnaker.
 
 ```bash
 ~/scratch/manage/update_console.sh
@@ -37,17 +48,26 @@ All [halyard](https://www.spinnaker.io/reference/halyard/commands/) commands are
 hal config
 ```
 
+As with provisioning Spinnaker, don't use `hal deploy connect` when managing
+Spinnaker. Also, don't use `hal deploy apply`. Instead, use the `push_config.sh`
+and `apply_config.sh` commands shown below.
+
 ### Notes on Halyard commands that reference local files
 
-If you add a Kubernetes account that references a kubeconfig file (specified via the `--kubeconfig-file`
-argument to the `hal config provider kubernetes account add/edit` commands), that file must live within
-the '`~/.hal/default/credentials`' directory on your Cloud Shell VM (you'll need to create that directory
-if it does not already exist). The `default` path segment should be changed if you are using a different
-name for your [halyard deployment](https://www.spinnaker.io/reference/halyard/#deployments).
+If you add a Kubernetes account that references a kubeconfig file, that file must live within
+the '`~/.hal/default/credentials`' directory on your Cloud Shell VM. The
+kubeconfig is specified using the `--kubeconfig-file` argument to the
+`hal config provider kubernetes account add` and ...`edit` commands.
 
-Same requirement for any Google json key file specified via the `--json-path` argument to various commands.
+Change the `default` path segment if you are using a different name for your deployment.
+
+The same requirement applies for any Google JSON key file specified via the
+`--json-path` argument to various commands.
 
 ### Push updated config to Spinnaker deployment
+
+If you change any of the configuration, paste and run this command to push
+those changes to your Spinnaker deployment.
 
 ```bash
 ~/scratch/manage/push_config.sh
@@ -55,30 +75,42 @@ Same requirement for any Google json key file specified via the `--json-path` ar
 
 ### Apply updated config to Spinnaker deployment
 
+After you push configuration changes, you need to paste and run the following
+command to apply them to your Spinnaker deployment.
+
 ```bash
 ~/scratch/manage/apply_config.sh
 ```
 
-## Scripts for Common Commands
+## Included command-line tools
 
 ### Halyard CLI
 
-The Halyard CLI (`hal`) and daemon are installed in your Cloud Shell. If you want to use a specific version of Halyard, you must use
-`~/scratch/install_hal.sh`. If you want to upgrade to the latest version of Halyard, you must use `~/scratch/update_hal.sh`.
+The [Halyard CLI](https://www.spinnaker.io/reference/halyard/) (`hal`) and
+daemon are installed in your Cloud Shell.
+
+If you want to use a specific version of Halyard, use `~/scratch/install_hal.sh`.
+If you want to upgrade to the latest version of Halyard, use `~/scratch/update_hal.sh`.
 
 ### Spinnaker CLI
 
-The Spinnaker CLI (`spin`) is installed in your Cloud Shell. If you want to upgrade to the latest version, you must use `~/scratch/install_spin.sh`.
+The [Spinnaker CLI](https://www.spinnaker.io/guides/spin/app/) 
+(`spin`) is installed in your Cloud Shell.
+
+If you want to upgrade to the latest version, use `~/scratch/install_spin.sh`.
 
 ### Add Spinnaker account for GKE
 
-Prior to running this command, you must ensure that you have configured the context you intend to use to manage your GKE resources.
+Before you run this command, make sure you've configured the context you intend
+to use to manage your GKE resources.
 
-The public Spinnaker documentation contains details on [configuring GKE clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
+The public Spinnaker documentation contains details on [configuring GKE
+clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 ```bash
 ~/scratch/manage/add_gke_account.sh
 ```
+## Scripts for Common Commands
 
 ### Add Spinnaker account for GCE
 

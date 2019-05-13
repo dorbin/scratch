@@ -1,13 +1,18 @@
 # Install Spinnaker
 
-## GCP Project Selection
+## Select GCP project
+
+Select the project in which you'll install Spinnaker, then click **Confirm project**.
 
 <walkthrough-project-billing-setup>
 </walkthrough-project-billing-setup>
 
 ## Spinnaker Installation
 
-Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon below to copy the command to your shell, and then run it from the shell by pressing Enter/Return.
+Now let's provision Spinnaker within {{project-id}}.
+
+Click the paste button on the command below to copy that command to your shell,
+then press **Enter** to run it from the Shell .
 
 ### Configure the environment.
 
@@ -15,33 +20,50 @@ Let's now provision Spinnaker within {{project-id}}. Click the Cloud Shell icon 
 PROJECT_ID={{project-id}} ~/scratch/install/setup_properties.sh
 ```
 
-Verify (or modify) the configuration that will be used for your Spinnaker installation.
+Optionally, click the link below to open the properties file for your Spinnaker
+installation.
 
 <walkthrough-editor-open-file
     filePath="scratch/install/properties"
     text="Open properties file">
 </walkthrough-editor-open-file>
 
+**Proceed with caution** If you edit this file, the installation might not work
+as expected.
+
 ### Begin the installation (this will take some time).
+
+This will take some time. Watch the Cloud Shell command line to see when it completes.
 
 ```bash
 ~/scratch/install/setup.sh
 ```
 
-Once the setup script completes, continue to the next step.
+After the setup script finishes, click **Next** to continue to the next step.
 
 ## Connect to Spinnaker
 
+You'll now run commands to...
+* connect to Spinnaker 
+* open the Spinnaker UI (Deck) in a browswer window
+
+You have two choices:
+* forward port 8080 to tunnel to Spinnaker from your Cloud Shell
+* expose Deck securely via a public IP
+
 ### Forward Port to Deck
+
+Don't use the `hal deploy connect` command. Instead, use the following command
+only.
 
 ```bash
 ~/scratch/manage/connect_unsecured.sh
 ```
 
-Do not use the `hal deploy connect` command, as this will result in two ports, 8084 and 9000, being forwarded from your shell. Cloud Shell can only expose one port for preview,
-so you'll need to use the connect_unsecured.sh command instead.
-
 ### Connect to Deck
+
+To connect to the Deck UI, click the link below, which highlights the Preview
+button above.
 
 <walkthrough-spotlight-pointer
     spotlightId="devshell-web-preview-button"
@@ -64,7 +86,8 @@ expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.go
 
 ### Manage & Share Spinnaker
 
-Now that Spinnaker has been provisioned, next steps can be found via this landing page:
+Now that you have provisioned Spinnaker, run this command to start managing
+Spinnaker:
 
 ```bash
 ~/scratch/manage/update_console.sh
@@ -73,6 +96,6 @@ Now that Spinnaker has been provisioned, next steps can be found via this landin
 ### Ongoing Management
 
 When you want to manage Spinnaker in the future, you can always locate your Spinnaker installation
-by navigating to the newly-registered Kubernetes Application via the [Applications](https://console.developers.google.com/kubernetes/application?project={{project-id}}) view.
+by navigating to the newly registered Kubernetes application via the [Applications](https://console.developers.google.com/kubernetes/application?project={{project-id}}) view.
 
 The application's *Next Steps* section contains the relevant links and operator instructions.
