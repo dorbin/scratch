@@ -40,7 +40,8 @@ configuration service and consists of a CLI and a daemon. The CLI will be
 installed in your Cloud Shell and the daemon will be installed in a Pod managed
 by a StatefulSet object.
 
-Spin is Spinnaker's CLI. It will be installed in your Cloud Shell.
+[Spin](https://www.spinnaker.io/guides/spin/app/) is Spinnaker's CLI. It will
+be installed in your Cloud Shell.
 
 The Spinnaker solution will not be exposed to external traffic by default.
 A good initial step is accessing Spinnaker via port forwarding, and a script is
