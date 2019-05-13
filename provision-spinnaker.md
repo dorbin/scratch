@@ -12,7 +12,7 @@ Select the project in which you'll install Spinnaker, then click **Confirm proje
 Now let's provision Spinnaker within {{project-id}}.
 
 Click the paste button on the command below to copy that command to your shell,
-then press **Enter** to run it from the Shell .
+then press **Enter** to run it from the Shell.
 
 ### Configure the environment.
 
@@ -45,7 +45,7 @@ After the setup script finishes, click **Next** to continue to the next step.
 
 You'll now run commands to...
 * connect to Spinnaker 
-* open the Spinnaker UI (Deck) in a browswer window
+* open the Spinnaker UI (Deck) in a browser window
 
 You have two choices:
 * forward port 8080 to tunnel to Spinnaker from your Cloud Shell
@@ -96,6 +96,6 @@ Spinnaker:
 ### Ongoing Management
 
 When you want to manage Spinnaker in the future, you can always locate your Spinnaker installation
-by navigating to the newly registered Kubernetes application via the [Applications](https://console.developers.google.com/kubernetes/application?project={{project-id}}) view.
+by navigating to the newly registered Kubernetes Application via the [Applications](https://console.developers.google.com/kubernetes/application?project={{project-id}}) view.
 
 The application's *Next Steps* section contains the relevant links and operator instructions.

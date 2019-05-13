@@ -98,6 +98,9 @@ The [Spinnaker CLI](https://www.spinnaker.io/guides/spin/app/)
 (`spin`) is installed in your Cloud Shell.
 
 If you want to upgrade to the latest version, use `~/scratch/install_spin.sh`.
+```
+
+## Scripts for Common Commands
 
 ### Add Spinnaker account for GKE
 
@@ -109,8 +112,6 @@ clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 ```bash
 ~/scratch/manage/add_gke_account.sh
-```
-## Scripts for Common Commands
 
 ### Add Spinnaker account for GCE
 
