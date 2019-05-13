@@ -76,7 +76,7 @@ you would prefer to use an existing cluster, you must ensure that it has:
 When you click on the "Open in Google Cloud Shell" button above, a tutorial
 pane will open with several copy/paste commands. As part of this process, a
 `properties` file will be generated. You can modify the values in the generated
-properties file to fine-tune the installation _prior_ to launching the actual
+`properties` file to fine-tune the installation _prior_ to launching the actual
 `setup` script.
 
 When the initial installation process completes, you can use the remaining
