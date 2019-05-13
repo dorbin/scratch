@@ -98,7 +98,10 @@ this repo
 containing the Spinnaker deployment you intend to manage)
 * Pull all the config from the Spinnaker deployment into your Cloud Shell
 environment
-* Make all of your changes, using `hal`, in Cloud Shell
+* Update the Cloud Shell tutorial pane to reflect the newly-pulled config
+* Make all of your changes using `hal` in Cloud Shell (often by simply
+copying & pasting commands); `hal` will apply its changes and perform its
+validation against a Halyard daemon running in Cloud Shell
 * Push your changes back to the Spinnaker deployment (a full config backup is
 implicitly pushed to a bucket as well)
 * Apply your changes to the Spinnaker deployment
