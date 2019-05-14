@@ -6,15 +6,6 @@ releasing software changes with high velocity and confidence.
 If you would like to learn more about Spinnaker, please visit the
 [Spinnaker website](https://spinnaker.io/).
 
-This application uses NGINX as a web server and is configured to serve only
-static content. Each NGINX Pod is associated with its own PersistentVolume,
-which is created as a standard persistent disk defined by Google Kubernetes
-Engine.
-
-This application is pre-configured with an SSL certificate. While you are
-installing the application using the steps below, you must replace the
-certificate with your own valid SSL certificate.
-
 ## About Google Click to Deploy
 
 Popular open stacks on Kubernetes packaged by Google.
