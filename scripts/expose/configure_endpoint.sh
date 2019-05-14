@@ -6,7 +6,7 @@ bold() {
 
 pushd ~/scratch/scripts
 
-source ./properties
+source ./install/properties
 
 ~/scratch/scripts/manage/check_project_mismatch.sh
 
