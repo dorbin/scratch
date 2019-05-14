@@ -12,7 +12,7 @@
 You can skip this step if you are the original installer/operator, as they will have already been installed.
 
 ```bash
-~/scratch/install_hal.sh && ~/scratch/install_spin.sh && source ~/.bashrc
+~/scratch/scripts/cli/install_hal.sh && ~/scratch/scripts/cli/install_spin.sh && source ~/.bashrc
 ```
 
 ### Ensure you are connected to the correct Kubernetes context

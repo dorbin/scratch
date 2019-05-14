@@ -217,8 +217,8 @@ deploy_ready spin-orca "orchestration engine"
 deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
 
-~/scratch/install_hal.sh
-~/scratch/install_spin.sh
+~/scratch/scripts/cli/install_hal.sh
+~/scratch/scripts/cli/install_spin.sh
 
 # We want a backup containing the newly-created ~/.spin/* files as well.
 ~/scratch/scripts/manage/push_config.sh

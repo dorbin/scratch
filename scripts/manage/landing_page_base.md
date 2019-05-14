@@ -89,15 +89,15 @@ command to apply them to your Spinnaker deployment.
 The [Halyard CLI](https://www.spinnaker.io/reference/halyard/) (`hal`) and
 daemon are installed in your Cloud Shell.
 
-If you want to use a specific version of Halyard, use `~/scratch/install_hal.sh`.
-If you want to upgrade to the latest version of Halyard, use `~/scratch/update_hal.sh`.
+If you want to use a specific version of Halyard, use `~/scratch/scripts/cli/install_hal.sh`.
+If you want to upgrade to the latest version of Halyard, use `~/scratch/scripts/cli/update_hal.sh`.
 
 ### Spinnaker CLI
 
 The [Spinnaker CLI](https://www.spinnaker.io/guides/spin/app/) 
 (`spin`) is installed in your Cloud Shell.
 
-If you want to upgrade to the latest version, use `~/scratch/install_spin.sh`.
+If you want to upgrade to the latest version, use `~/scratch/scripts/cli/install_spin.sh`.
 ```
 
 ## Scripts for Common Commands
