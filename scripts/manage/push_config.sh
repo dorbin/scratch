@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/scratch/install/properties
+source ~/scratch/scripts/install/properties
 
 # TODO(duftler): Add check to ensure that we are not overriding with older or empty config.
 
@@ -82,11 +82,11 @@ copy_if_exists() {
   fi
 }
 
-copy_if_exists ~/scratch/install/properties deployment_config_files
-copy_if_exists ~/scratch/install/spinnakerAuditLog/config.json deployment_config_files
-copy_if_exists ~/scratch/install/spinnakerAuditLog/index.js deployment_config_files
-copy_if_exists ~/scratch/install/expose/configure_iap_expanded.md deployment_config_files
-copy_if_exists ~/scratch/install/expose/openapi_expanded.yml deployment_config_files
+copy_if_exists ~/scratch/scripts/install/properties deployment_config_files
+copy_if_exists ~/scratch/scripts/install/spinnakerAuditLog/config.json deployment_config_files
+copy_if_exists ~/scratch/scripts/install/spinnakerAuditLog/index.js deployment_config_files
+copy_if_exists ~/scratch/scripts/install/expose/configure_iap_expanded.md deployment_config_files
+copy_if_exists ~/scratch/scripts/install/expose/openapi_expanded.yml deployment_config_files
 copy_if_exists ~/scratch/scripts/manage/landing_page_expanded.md deployment_config_files
 copy_if_exists ~/.spin/config deployment_config_files
 copy_if_exists ~/.spin/key.json deployment_config_files

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pushd ~/scratch/install
+pushd ~/scratch/scripts/install
 
 source ./properties
 

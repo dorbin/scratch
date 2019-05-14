@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/scratch/install
+pushd ~/scratch/scripts/install
 
 source ./properties
 
@@ -15,7 +15,7 @@ DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
 if [ "$DOMAIN_NAME_LENGTH" -gt "63" ]; then
   echo "Domain name $DOMAIN_NAME is greater than 63 characters. Please specify a \
 domain name not longer than 63 characters. The domain name is specified in the \
-$HOME/scratch/install/properties file."
+$HOME/scratch/scripts/install/properties file."
   exit 1
 fi
 

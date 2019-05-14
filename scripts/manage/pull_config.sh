@@ -67,11 +67,11 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
     fi
   }
 
-  extract_to_file_if_defined properties ~/scratch/install/properties
-  extract_to_file_if_defined config.json ~/scratch/install/spinnakerAuditLog/config.json
-  extract_to_file_if_defined index.js ~/scratch/install/spinnakerAuditLog/index.js
-  extract_to_file_if_defined configure_iap_expanded.md ~/scratch/install/expose/configure_iap_expanded.md
-  extract_to_file_if_defined openapi_expanded.yml ~/scratch/install/expose/openapi_expanded.yml
+  extract_to_file_if_defined properties ~/scratch/scripts/install/properties
+  extract_to_file_if_defined config.json ~/scratch/scripts/install/spinnakerAuditLog/config.json
+  extract_to_file_if_defined index.js ~/scratch/scripts/install/spinnakerAuditLog/index.js
+  extract_to_file_if_defined configure_iap_expanded.md ~/scratch/scripts/install/expose/configure_iap_expanded.md
+  extract_to_file_if_defined openapi_expanded.yml ~/scratch/scripts/install/expose/openapi_expanded.yml
   extract_to_file_if_defined landing_page_expanded.md ~/scratch/scripts/manage/landing_page_expanded.md
   mkdir -p ~/.spin
   extract_to_file_if_defined config ~/.spin/config

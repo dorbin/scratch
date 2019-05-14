@@ -17,14 +17,14 @@ then press **Enter** to run it from the Shell.
 ### Configure the environment.
 
 ```bash
-PROJECT_ID={{project-id}} ~/scratch/install/setup_properties.sh
+PROJECT_ID={{project-id}} ~/scratch/scripts/install/setup_properties.sh
 ```
 
 Optionally, click the link below to open the properties file for your Spinnaker
 installation.
 
 <walkthrough-editor-open-file
-    filePath="scratch/install/properties"
+    filePath="scratch/scripts/install/properties"
     text="Open properties file">
 </walkthrough-editor-open-file>
 
@@ -36,7 +36,7 @@ as expected.
 This will take some time. Watch the Cloud Shell command line to see when it completes.
 
 ```bash
-~/scratch/install/setup.sh
+~/scratch/scripts/install/setup.sh
 ```
 
 After the setup script finishes, click **Next** to continue to the next step.
@@ -81,7 +81,7 @@ If you would like to connect to Spinnaker without relying on port forwarding, we
 expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.google.com/iap/).
 
 ```bash
-~/scratch/install/expose/configure_endpoint.sh
+~/scratch/scripts/install/expose/configure_endpoint.sh
 ```
 
 ### Manage & Share Spinnaker

@@ -8,7 +8,7 @@ err() {
   echo "$*" >&2;
 }
 
-source ~/scratch/install/properties
+source ~/scratch/scripts/install/properties
 
 ~/scratch/scripts/manage/check_project_mismatch.sh
 
@@ -152,7 +152,7 @@ fi
 
 bold "Provisioning Spinnaker resources..."
 
-envsubst < ~/scratch/install/quick-install.yml | kubectl apply -f -
+envsubst < ~/scratch/scripts/install/quick-install.yml | kubectl apply -f -
 
 job_ready() {
   printf "Waiting on job $1 to complete"
@@ -186,9 +186,9 @@ EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
 if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   bold "Deploying audit log cloud function $CLOUD_FUNCTION_NAME..."
 
-  cat ~/scratch/install/spinnakerAuditLog/config_json.template | envsubst > ~/scratch/install/spinnakerAuditLog/config.json
-  cat ~/scratch/install/spinnakerAuditLog/index_js.template | envsubst > ~/scratch/install/spinnakerAuditLog/index.js
-  gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/scratch/install/spinnakerAuditLog \
+  cat ~/scratch/scripts/install/spinnakerAuditLog/config_json.template | envsubst > ~/scratch/scripts/install/spinnakerAuditLog/config.json
+  cat ~/scratch/scripts/install/spinnakerAuditLog/index_js.template | envsubst > ~/scratch/scripts/install/spinnakerAuditLog/index.js
+  gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/scratch/scripts/install/spinnakerAuditLog \
     --trigger-http --memory 2048MB --runtime nodejs8 --project $PROJECT_ID
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
