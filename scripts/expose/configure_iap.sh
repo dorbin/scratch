@@ -4,9 +4,9 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/scratch/scripts/install
+pushd ~/scratch/scripts
 
-source ./properties
+source ./install/properties
 
 ~/scratch/scripts/manage/check_project_mismatch.sh
 
