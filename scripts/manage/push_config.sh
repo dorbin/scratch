@@ -87,7 +87,7 @@ copy_if_exists ~/scratch/install/spinnakerAuditLog/config.json deployment_config
 copy_if_exists ~/scratch/install/spinnakerAuditLog/index.js deployment_config_files
 copy_if_exists ~/scratch/install/expose/configure_iap_expanded.md deployment_config_files
 copy_if_exists ~/scratch/install/expose/openapi_expanded.yml deployment_config_files
-copy_if_exists ~/scratch/manage/landing_page_expanded.md deployment_config_files
+copy_if_exists ~/scratch/scripts/manage/landing_page_expanded.md deployment_config_files
 copy_if_exists ~/.spin/config deployment_config_files
 copy_if_exists ~/.spin/key.json deployment_config_files
 

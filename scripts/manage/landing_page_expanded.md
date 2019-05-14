@@ -18,13 +18,13 @@ You can skip this step if you are the original installer/operator, as they will 
 ### Ensure you are connected to the correct Kubernetes context
 
 ```bash
-PROJECT_ID={{project-id}} ~/scratch/manage/check_cluster_config.sh
+PROJECT_ID={{project-id}} ~/scratch/scripts/manage/check_cluster_config.sh
 ```
 
 ### Pull all config from Spinnaker deployment into cloud shell
 
 ```bash
-~/scratch/manage/pull_config.sh
+~/scratch/scripts/manage/pull_config.sh
 ```
 
 ### Update the console
@@ -34,5 +34,5 @@ PROJECT_ID={{project-id}} ~/scratch/manage/check_cluster_config.sh
 This will include details on connecting to Spinnaker.
 
 ```bash
-~/scratch/manage/update_console.sh
+~/scratch/scripts/manage/update_console.sh
 ```

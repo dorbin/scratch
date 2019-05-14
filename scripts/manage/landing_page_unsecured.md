@@ -3,7 +3,7 @@
 ### Forward Port to Deck
 
 ```bash
-~/scratch/manage/connect_unsecured.sh
+~/scratch/scripts/manage/connect_unsecured.sh
 ```
 
 ### Connect to Deck

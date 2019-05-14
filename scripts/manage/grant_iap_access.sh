@@ -15,7 +15,7 @@ pushd ~/scratch/install
 
 source ./properties
 
-~/scratch/manage/check_project_mismatch.sh
+~/scratch/scripts/manage/check_project_mismatch.sh
 
 source ~/scratch/install/expose/set_iap_properties.sh
 

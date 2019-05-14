@@ -8,7 +8,7 @@ pushd ~/scratch/install
 
 source ./properties
 
-~/scratch/manage/check_project_mismatch.sh
+~/scratch/scripts/manage/check_project_mismatch.sh
 
 EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
   --field-selector metadata.name=="$SECRET_NAME" \
@@ -83,9 +83,9 @@ bold "Configuring Spinnaker security settings..."
 
 cat expose/configure_hal_security.sh | envsubst | bash
 
-~/scratch/manage/update_landing_page.sh
-~/scratch/manage/push_config.sh
-~/scratch/manage/apply_config.sh
+~/scratch/scripts/manage/update_landing_page.sh
+~/scratch/scripts/manage/push_config.sh
+~/scratch/scripts/manage/apply_config.sh
 
 # # What about CORS?
 

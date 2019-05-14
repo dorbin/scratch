@@ -12,10 +12,10 @@ export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
 
 if [ -z "$IP_ADDR" ]; then
   bold "Updating Cloud Shell landing page for unsecured Spinnaker..."
-  cat ~/scratch/manage/landing_page_base.md ~/scratch/manage/landing_page_unsecured.md \
-    | envsubst > ~/scratch/manage/landing_page_expanded.md
+  cat ~/scratch/scripts/manage/landing_page_base.md ~/scratch/scripts/manage/landing_page_unsecured.md \
+    | envsubst > ~/scratch/scripts/manage/landing_page_expanded.md
 else
   bold "Updating Cloud Shell landing page for secured Spinnaker..."
-  cat ~/scratch/manage/landing_page_base.md ~/scratch/manage/landing_page_secured.md \
-    | envsubst > ~/scratch/manage/landing_page_expanded.md
+  cat ~/scratch/scripts/manage/landing_page_base.md ~/scratch/scripts/manage/landing_page_secured.md \
+    | envsubst > ~/scratch/scripts/manage/landing_page_expanded.md
 fi

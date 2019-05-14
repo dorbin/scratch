@@ -10,7 +10,7 @@ err() {
 
 source ~/scratch/install/properties
 
-~/scratch/manage/check_project_mismatch.sh
+~/scratch/scripts/manage/check_project_mismatch.sh
 
 REQUIRED_APIS="cloudfunctions.googleapis.com container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
@@ -166,7 +166,7 @@ job_ready() {
 
 job_ready hal-deploy-apply
 
-~/scratch/manage/update_landing_page.sh
+~/scratch/scripts/manage/update_landing_page.sh
 ~/scratch/scripts/deploy_application_manifest.sh
 
 # Delete any existing deployment config secret.
@@ -195,9 +195,9 @@ else
 fi
 
 # We want the local hal config to match what was deployed.
-~/scratch/manage/pull_config.sh
+~/scratch/scripts/manage/pull_config.sh
 # We want a full backup stored in the bucket and the full deployment config stored in a secret.
-~/scratch/manage/push_config.sh
+~/scratch/scripts/manage/push_config.sh
 
 deploy_ready() {
   printf "Waiting on $2 to come online"
@@ -221,4 +221,4 @@ deploy_ready spin-deck "UI server"
 ~/scratch/install_spin.sh
 
 # We want a backup containing the newly-created ~/.spin/* files as well.
-~/scratch/manage/push_config.sh
+~/scratch/scripts/manage/push_config.sh

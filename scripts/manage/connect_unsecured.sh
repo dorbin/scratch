@@ -6,7 +6,7 @@ bold() {
 
 source ~/scratch/install/properties
 
-~/scratch/manage/check_project_mismatch.sh
+~/scratch/scripts/manage/check_project_mismatch.sh
 
 bold "Locating Deck pod..."
 

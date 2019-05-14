@@ -57,7 +57,7 @@ Don't use the `hal deploy connect` command. Instead, use the following command
 only.
 
 ```bash
-~/scratch/manage/connect_unsecured.sh
+~/scratch/scripts/manage/connect_unsecured.sh
 ```
 
 ### Connect to Deck
@@ -90,7 +90,7 @@ Now that you have provisioned Spinnaker, run this command to start managing
 Spinnaker:
 
 ```bash
-~/scratch/manage/update_console.sh
+~/scratch/scripts/manage/update_console.sh
 ```
 
 ### Ongoing Management

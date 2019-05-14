@@ -8,7 +8,7 @@ pushd ~/scratch/install
 
 source ./properties
 
-~/scratch/manage/check_project_mismatch.sh
+~/scratch/scripts/manage/check_project_mismatch.sh
 
 DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
 

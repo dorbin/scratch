@@ -17,7 +17,7 @@ This section guides you as you manage your Spinnaker deployment.
 ### Ensure you are connected to the correct Kubernetes context
 
 ```bash
-PROJECT_ID={{project-id}} ~/scratch/manage/check_cluster_config.sh
+PROJECT_ID={{project-id}} ~/scratch/scripts/manage/check_cluster_config.sh
 ```
 
 ### Pull Spinnaker config
@@ -27,7 +27,7 @@ deployment into your Cloud Shell.
 
 
 ```bash
-~/scratch/manage/pull_config.sh
+~/scratch/scripts/manage/pull_config.sh
 ```
 
 ### Update the console
@@ -37,7 +37,7 @@ deployment into your Cloud Shell.
 This will include details on how to connect to Spinnaker.
 
 ```bash
-~/scratch/manage/update_console.sh
+~/scratch/scripts/manage/update_console.sh
 ```
 
 ### Configure Spinnaker via Halyard
@@ -70,7 +70,7 @@ If you change any of the configuration, paste and run this command to push
 those changes to your Spinnaker deployment.
 
 ```bash
-~/scratch/manage/push_config.sh
+~/scratch/scripts/manage/push_config.sh
 ```
 
 ### Apply updated config to Spinnaker deployment
@@ -79,7 +79,7 @@ After you push configuration changes, you need to paste and run the following
 command to apply them to your Spinnaker deployment.
 
 ```bash
-~/scratch/manage/apply_config.sh
+~/scratch/scripts/manage/apply_config.sh
 ```
 
 ## Included command-line tools
@@ -111,18 +111,18 @@ The public Spinnaker documentation contains details on [configuring GKE
 clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 ```bash
-~/scratch/manage/add_gke_account.sh
+~/scratch/scripts/manage/add_gke_account.sh
 
 ### Add Spinnaker account for GCE
 
 ```bash
-~/scratch/manage/add_gce_account.sh
+~/scratch/scripts/manage/add_gce_account.sh
 ```
 
 ### Connect to Redis
 
 ```bash
-~/scratch/manage/connect_to_redis.sh
+~/scratch/scripts/manage/connect_to_redis.sh
 ```
 
 ## Configure Operator Access
