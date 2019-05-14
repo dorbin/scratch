@@ -1,1 +1,0 @@
-[![Provision Spinnaker](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/duftler/scratch.git&cloudshell_working_dir=scripts/install&cloudshell_tutorial=provision-spinnaker.md)
