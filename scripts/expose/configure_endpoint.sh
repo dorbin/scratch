@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/scratch/scripts/install
+pushd ~/scratch/scripts
 
 source ./properties
 
