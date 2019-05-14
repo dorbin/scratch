@@ -55,7 +55,7 @@ domain behind the [Identity-Aware Proxy](https://cloud.google.com/iap/).
 
 You must use [Google Cloud Shell](https://cloud.google.com/shell/) to perform the installation.
 
-[![Provision Spinnaker](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/duftler/scratch.git&cloudshell_tutorial=provision-spinnaker.md)
+[![Provision Spinnaker](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/duftler/scratch.git&cloudshell_working_dir=scripts/install&cloudshell_tutorial=provision-spinnaker.md)
 
 ### Prerequisites
 
