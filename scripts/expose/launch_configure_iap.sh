@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-pushd ~/scratch/scripts/install
+pushd ~/scratch/scripts
 
-source ./properties
+source ./install/properties
 
 if [ $DOMAIN_NAME = "$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog" ]; then
   export TOP_PRIVATE_DOMAIN=$PROJECT_ID.cloud.goog
