@@ -167,7 +167,7 @@ job_ready() {
 job_ready hal-deploy-apply
 
 ~/scratch/manage/update_landing_page.sh
-~/scratch/c2d/deploy_application.sh
+~/scratch/scripts/deploy_application_manifest.sh
 
 # Delete any existing deployment config secret.
 # It will be recreated with up-to-date contents during push_config.sh.
