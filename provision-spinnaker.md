@@ -81,7 +81,7 @@ If you would like to connect to Spinnaker without relying on port forwarding, we
 expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.google.com/iap/).
 
 ```bash
-~/scratch/scripts/install/expose/configure_endpoint.sh
+~/scratch/scripts/expose/configure_endpoint.sh
 ```
 
 ### Manage & Share Spinnaker

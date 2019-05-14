@@ -17,7 +17,7 @@ source ./properties
 
 ~/scratch/scripts/manage/check_project_mismatch.sh
 
-source ~/scratch/scripts/install/expose/set_iap_properties.sh
+source ~/scratch/scripts/expose/set_iap_properties.sh
 
 gcurl() {
   curl -s -H "Authorization:Bearer $(gcloud auth print-access-token)" \

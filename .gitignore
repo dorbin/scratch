@@ -1,7 +1,7 @@
 InstallHalyard.sh
+scripts/expose/*_expanded.*
 scripts/install/properties
 scripts/install/properties.*
 scripts/install/InstallHalyard.sh
-scripts/install/expose/*_expanded.*
 scripts/install/spinnakerAuditLog/config.json
 scripts/install/spinnakerAuditLog/index.js

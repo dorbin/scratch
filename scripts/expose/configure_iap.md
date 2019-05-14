@@ -17,7 +17,7 @@ Ensure that you note the generated *Client ID* and *Client secret* for your new 
 ### Expose Spinnaker and allow for secure access via IAP
 
 ```bash
-~/scratch/scripts/install/expose/configure_iap.sh
+~/scratch/scripts/expose/configure_iap.sh
 ```
 
 This phase could take 30-60 minutes.
